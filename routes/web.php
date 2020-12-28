@@ -29,6 +29,15 @@ Route::get('/category/status-inactive', 'backend\CategoryController@makeInactive
 Route::get('/category/edit', 'backend\CategoryController@edit')->name('category.edit');
 Route::post('/category/update', 'backend\CategoryController@update')->name('category.update');
 
+#Suppliers Routes
+Route::prefix('supplier')->group(function () {
+    Route::get('index','backend\SupplierController@index')->name('supplier.index');
+    Route::get('fetch','backend\SupplierController@getAllSupplier')->name('supplier.fetch');
+    Route::post('store','backend\SupplierController@store')->name('supplier.store');
+    Route::get('edit','backend\SupplierController@edit')->name('supplier.edit');
+    Route::post('update','backend\SupplierController@update')->name('supplier.update');
+});
+
 
 
 

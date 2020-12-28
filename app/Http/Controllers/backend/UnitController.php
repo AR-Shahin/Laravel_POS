@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use function response;
+use function strtoupper;
 use function view;
 
 class UnitController extends Controller
@@ -37,7 +38,7 @@ class UnitController extends Controller
             ]);
         }else{
             $unit = new Unit();
-            $unit->name = ucwords($request->name);
+            $unit->name = strtoupper($request->name);
             $unit->created_by = 1;
             if($unit->save()){
                 return response()->json([
@@ -76,7 +77,7 @@ class UnitController extends Controller
             ]);
         }else{
             $unit = Unit::find($request->id);
-            $unit->name = ucwords($request->name);
+            $unit->name = strtoupper($request->name);
             $unit->updated_by = 1;
             if($unit->save()){
                 return response()->json([
