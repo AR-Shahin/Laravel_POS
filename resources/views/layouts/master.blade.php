@@ -3,7 +3,7 @@
 @include('includes.sidebar')
 @section('main_section')
     <section id="main-content">
-        <section class="wrapper site-min-height">
+        <section class="wrapper site---min-height" style="margin-top: 25px">
             @yield('main_content')
         </section>
     </section>
