@@ -27,6 +27,10 @@
     <link href="{{asset('backend')}}/css/style-responsive.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script type="text/javascript" language="javascript" src="{{asset('backend')}}/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="{{asset('backend')}}/assets/data-tables/DT_bootstrap.js"></script>
+    <!--dynamic table initialization -->
+    <script src="{{asset('backend')}}/js/dynamic_table_init.js"></script>
 </head>
 
 <body>
@@ -43,10 +47,7 @@
 <script src="{{asset('backend')}}/js/slidebars.min.js"></script>
 <script src="{{asset('backend')}}/js/jquery.nicescroll.js" type="text/javascript"></script>
 <script src="{{asset('backend')}}/js/respond.min.js" ></script>
-<script type="text/javascript" language="javascript" src="{{asset('backend')}}/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="{{asset('backend')}}/assets/data-tables/DT_bootstrap.js"></script>
-<!--dynamic table initialization -->
-<script src="{{asset('backend')}}/js/dynamic_table_init.js"></script>
+
 <!--common script for all pages-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{{asset('backend')}}/js/common-scripts.js"></script>

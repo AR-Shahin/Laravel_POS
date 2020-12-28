@@ -5,27 +5,21 @@
         <div class="col-sm-12 col-md-8">
             <section class="card">
                 <header class="card-header">
-                    Dynamic Table
-                    <span class="tools pull-right">
-                                        <a href="javascript:;" class="fa fa-chevron-down"></a>
-                                        <a href="javascript:;" class="fa fa-times"></a>
-                                    </span>
-                </header>
-                <div class="card-body">
+                    <h4 class="text-primary">Manage Unit</h4>
                     <div class="adv-table">
-                        <table  class="display table table-bordered table-striped" id="unit_table">
+                        <table class="display table table-bordered table-striped" id="unit_table">
                             <thead>
                             <tr>
                                 <th>SL</th>
                                 <th>Name</th>
                                 <th>Status</th>
-                                <th class="hidden-phone">Actions</th>
+                                <th class="">Actions</th>
                             </tr>
-
+                            <tbody id="unitTable"></tbody>
                             </thead>
                         </table>
                     </div>
-                </div>
+                </header>
             </section>
         </div>
         <div class="col-12 col-md-4">
@@ -50,7 +44,6 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
         var get_url = <?php echo json_encode(route('get.unit')) ?>;
         var store_unit_url = <?php echo json_encode(route('unit.store')) ?>;
@@ -65,7 +58,6 @@
             //Fetch Unit
             getAllUnits();
             function getAllUnits() {
-                //var URL = 'http://localhost/Laravel/POS/public/unit/get';
                 $.ajax({
                     url: get_url,
                     type:'GET',
@@ -99,7 +91,7 @@
                     rows = rows + '</td>';
                     rows = rows + '</tr>';
                 });
-                $("#unit_table").html(rows);
+                $("#unitTable").html(rows);
             }
 
             //Store Unit
@@ -194,7 +186,7 @@
             });
 
             //Update Unit
-            $('#catUpdateForm').on('submit',function (e) {
+            $('#unitUpdateForm').on('submit',function (e) {
                 e.preventDefault();
                 var name = $("#name").val();
                 var id = $("#unit_id").val();
@@ -272,7 +264,6 @@
     </script>
 
     {{--Edit Modal--}}
-
     <div class="modal fade" id="editModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -283,7 +274,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="catUpdateForm" >
+                    <form id="unitUpdateForm" >
                         <input type="hidden" id="unit_id" name="unit_id" value="">
                         <div class="form-group">
                             <input type="text" id="name" name="name" value="" class="form-control">

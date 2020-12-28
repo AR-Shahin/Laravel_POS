@@ -5,9 +5,6 @@ $(document).ready(function () {
         }
     });
 
-
-
-
 });
 function setSwalAlert(mode,title,text) {
     Swal.fire({
