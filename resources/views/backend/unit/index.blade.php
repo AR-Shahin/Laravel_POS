@@ -176,7 +176,7 @@
             })
 
             //Edit Unit
-            $('body').on('click','#editCategory',function (e) {
+            $('body').on('click','#editUnit',function (e) {
                 e.preventDefault();
                 var id = $(this).attr('data-id');
                 $.ajax({
@@ -221,14 +221,22 @@
             $('body').on('click','#deleteUnit',function (e) {
                 e.preventDefault();
                 var id = $(this).attr('data-id');
-                Swal.fire({
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success mx-2',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                     $.ajax({
@@ -237,14 +245,28 @@
                         data : {id : id},
                         success : function (response) {
                             getAllUnits();
-                            setSwalAlert('success','Good Job!',response.message);
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
                         },
                         error : function (e) {
                             console.log(e);
                         }
                     })
+
+                } else if (
+                        /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your file is safe :)',
+                        'error'
+                    )
                 }
-            });
+            })
             })
         });
     </script>
