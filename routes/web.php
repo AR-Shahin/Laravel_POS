@@ -35,7 +35,8 @@ Route::prefix('supplier')->group(function () {
     Route::get('fetch','backend\SupplierController@getAllSupplier')->name('supplier.fetch');
     Route::post('store','backend\SupplierController@store')->name('supplier.store');
     Route::get('edit','backend\SupplierController@edit')->name('supplier.edit');
-    Route::post('update','backend\SupplierController@update')->name('supplier.update');
+    Route::put('update','backend\SupplierController@update')->name('supplier.update');
+    Route::delete('delete','backend\SupplierController@destroy')->name('supplier.delete');
 });
 
 

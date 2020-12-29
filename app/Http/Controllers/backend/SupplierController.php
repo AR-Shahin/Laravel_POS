@@ -29,12 +29,21 @@ class SupplierController extends Controller
 
     public function store(Request $request){
 
-        $sup = Supplier::where('email',$request->email)->first();
-        if($sup){
+        $email = Supplier::where('email',$request->email)->first();
+        $phone = Supplier::where('phone',$request->phone)->first();
+        if($email){
             return response()->json([
-                'message' => 'EXIST'
+                'flag' => 'Email_EXIST',
+                'message' => 'Email Already Taken.'
             ]);
-        }else{
+        }
+        elseif ($phone){
+            return response()->json([
+                'flag' => 'Phone_EXIST',
+                'message' => 'Phone Already Taken.'
+            ]);
+        }
+        else{
             $sup = new Supplier();
             $sup->name = ucwords($request->name);
             $sup->address = ucwords($request->address);
@@ -56,18 +65,23 @@ class SupplierController extends Controller
     }
 
     public function update(Request $request){
-        $sup = Supplier::where('name',$request->name)->first();
-        if($sup){
+
+        $email = Supplier::where('email',$request->email)->first();
+        $phone = Supplier::where('phone',$request->phone)->first();
+        if($email){
             return response()->json([
-                'message' => 'EXIST'
+                'flag' => 'Email_EXIST',
+                'message' => 'Email Already Taken.'
+            ]);
+        }
+        elseif ($phone){
+            return response()->json([
+                'flag' => 'Phone_EXIST',
+                'message' => 'Phone Already Taken.'
             ]);
         }else{
-            $sup = Supplier::find($request->id);
-            $sup->name = ucwords($request->name);
-            $sup->address = ucwords($request->address);
-            $sup->email = $request->email;
-            $sup->phone = $request->phone;
-            if($sup->save()){
+            $up = Supplier::find($request->id)->update($request->all());
+            if($up){
                 return response()->json([
                     'message' => 'Data Updated successfully!',
                     'flag' => 'UPDATE',
