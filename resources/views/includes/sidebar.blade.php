@@ -16,8 +16,8 @@
                     <span>Users</span>
                 </a>
                 <ul class="sub">
-                    <li><a href="{{route('unit.index')}}">Manage Suppliers</a></li>
-                    <li><a href="{{route('unit.index')}}">Manage Customers</a></li>
+                    <li><a href="{{route('supplier.index')}}">Manage Suppliers</a></li>
+                    <li><a href="{{route('customer.index')}}">Manage Customers</a></li>
                 </ul>
             </li>
 

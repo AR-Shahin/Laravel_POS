@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Supplier;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use function ucwords;
 
-class SupplierController extends Controller
+class CustomerController extends Controller
 {
     public function index(){
-        return view('backend.supplier.index',$this->data);
+        return view('backend.customer.index',$this->data);
     }
-    public function getAllSupplier(){
+    public function getAllCustomer(){
 
-        return response(Supplier::latest()->get());
+        return response(Customer::latest()->get());
     }
 
     public function destroy(Request $request)
     {
-        $sup = Supplier::find($request->id);
+        $sup = Customer::find($request->id);
         if($sup->delete()){
             return response()->json([
                 'message' => 'Data deleted successfully!'
@@ -29,8 +28,8 @@ class SupplierController extends Controller
 
     public function store(Request $request){
 
-        $email = Supplier::where('email',$request->email)->first();
-        $phone = Supplier::where('phone',$request->phone)->first();
+        $email = Customer::where('email',$request->email)->first();
+        $phone = Customer::where('phone',$request->phone)->first();
         if($email){
             return response()->json([
                 'flag' => 'Email_EXIST',
@@ -44,7 +43,7 @@ class SupplierController extends Controller
             ]);
         }
         else{
-            $sup = new Supplier();
+            $sup = new Customer();
             $sup->name = ucwords($request->name);
             $sup->address = ucwords($request->address);
             $sup->email = $request->email;
@@ -60,14 +59,13 @@ class SupplierController extends Controller
     }
 
     public function edit(Request $request){
-        $sup = Supplier::find($request->id);
+        $sup = Customer::find($request->id);
         return response()->json($sup);
     }
 
     public function update(Request $request){
-
-        $email = Supplier::where('email',$request->email)->first();
-        $phone = Supplier::where('phone',$request->phone)->first();
+        $email = Customer::where('email',$request->email)->first();
+        $phone = Customer::where('phone',$request->phone)->first();
         if($email){
             return response()->json([
                 'flag' => 'Email_EXIST',
@@ -80,7 +78,7 @@ class SupplierController extends Controller
                 'message' => 'Phone Already Taken.'
             ]);
         }else{
-            $up = Supplier::find($request->id)->update($request->all());
+            $up = Customer::find($request->id)->update($request->all());
             if($up){
                 return response()->json([
                     'message' => 'Data Updated successfully!',

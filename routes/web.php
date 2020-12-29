@@ -39,6 +39,16 @@ Route::prefix('supplier')->group(function () {
     Route::delete('delete','backend\SupplierController@destroy')->name('supplier.delete');
 });
 
+#Customer Routes
+Route::prefix('customer')->group(function () {
+    Route::get('index','backend\CustomerController@index')->name('customer.index');
+    Route::get('fetch','backend\CustomerController@getAllCustomer')->name('customer.fetch');
+    Route::post('store','backend\CustomerController@store')->name('customer.store');
+    Route::get('edit','backend\CustomerController@edit')->name('customer.edit');
+    Route::put('update','backend\CustomerController@update')->name('customer.update');
+    Route::delete('delete','backend\CustomerController@destroy')->name('customer.delete');
+});
+
 
 
 
