@@ -49,6 +49,18 @@ Route::prefix('customer')->group(function () {
     Route::delete('delete','backend\CustomerController@destroy')->name('customer.delete');
 });
 
+#Products Routes
+Route::prefix('product')->group(function () {
+    Route::get('index','backend\ProductController@index')->name('product.index');
+    Route::get('fetch','backend\ProductController@getAllProduct')->name('product.fetch');
+    Route::post('store','backend\ProductController@store')->name('product.store');
+    Route::get('edit','backend\ProductController@edit')->name('product.edit');
+    Route::put('update','backend\ProductController@update')->name('product.update');
+    Route::delete('delete','backend\ProductController@destroy')->name('product.delete');
+    Route::put('status-active', 'backend\ProductController@makeActive')->name('product.status.active');
+    Route::put('status-inactive', 'backend\ProductController@makeInactive')->name('product.status.inactive');
+});
+
 
 
 

@@ -65,7 +65,6 @@ class SupplierController extends Controller
     }
 
     public function update(Request $request){
-
         $email = Supplier::where('email',$request->email)->first();
         $phone = Supplier::where('phone',$request->phone)->first();
         if($email){
@@ -74,7 +73,7 @@ class SupplierController extends Controller
                 'message' => 'Email Already Taken.'
             ]);
         }
-        elseif ($phone){
+        elseif($phone){
             return response()->json([
                 'flag' => 'Phone_EXIST',
                 'message' => 'Phone Already Taken.'

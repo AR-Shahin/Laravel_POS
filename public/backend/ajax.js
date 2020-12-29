@@ -47,6 +47,46 @@ $(document).ready(function () {
         }
     });
 
+    $('#addProductForm').on('submit',function (e) {
+        e.preventDefault();
+        var category = $('#category_id').val();
+        var unit = $('#unit_id').val();
+        var supplier = $('#supplier_id').val();
+        var name = $('#product').val();
+
+        if(name == ''){
+            $('#productError').text('Field Must not be Empty!');
+            $('#product').addClass('border-danger');
+        }else{
+            $('#productError').text('');
+            $('#product').removeClass('border-danger');
+        }
+
+        if(category == ''){
+            $('#categoryError').text('Field Must not be Empty!');
+            $('#category_id').addClass('border-danger');
+        }else{
+            $('#categoryError').text('');
+            $('#category_id').removeClass('border-danger');
+        }
+
+        if(unit == ''){
+            $('#unitError').text('Field Must not be Empty!');
+            $('#unit_id').addClass('border-danger');
+        }else{
+            $('#unitError').text('');
+            $('#unit_id').removeClass('border-danger');
+        }
+
+        if(supplier == ''){
+            $('#supplierError').text('Field Must not be Empty!');
+            $('#supplier_id').addClass('border-danger');
+        }else{
+            $('#supplierError').text('');
+            $('#supplier_id').removeClass('border-danger');
+        }
+    });
+
 });
 function setSwalAlert(mode,title,text) {
     Swal.fire({

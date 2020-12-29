@@ -29,7 +29,7 @@
                 <ul class="sub">
                     <li><a href="{{route('unit.index')}}">Unit</a></li>
                     <li><a href="{{route('category.index')}}">Category</a></li>
-                    <li><a href="javascript:;">Products</a></li>
+                    <li><a href="{{route('product.index')}}">Product</a></li>
                 </ul>
             </li>
 
