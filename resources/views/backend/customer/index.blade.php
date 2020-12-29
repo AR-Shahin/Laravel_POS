@@ -301,7 +301,7 @@
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="e_id" name="id">
                         <input type="text" name="name" class="form-control" id="e_name" placeholder="Enter Suppler Name">
-                        <span class="text-danger" id="nameError"></span>
+                        <span class="text-danger" id="e_nameError"></span>
                     </div>
                     <div class="form-group">
                         <input type="email" class="form-control" id="e_email" placeholder="Enter Suppler Email" name="email">
@@ -313,10 +313,10 @@
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="e_address" placeholder="Enter Suppler Address" name="address">
-                        <span class="text-danger" id="addressError"></span>
+                        <span class="text-danger" id="e_addressError"></span>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success btn-block">Update Supplier</button>
+                        <button class="btn btn-success btn-block">Update Customer</button>
                     </div>
                 </form>
             </div>
