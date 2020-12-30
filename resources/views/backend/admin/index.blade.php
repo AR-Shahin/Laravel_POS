@@ -79,6 +79,51 @@
             })
         }
         getAllAdmin();
+
+        //store
+        $('#addAdminForm').on('submit',function (e) {
+            e.preventDefault();
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var password = $('#password').val();
+            var confirm_password = $('#confirm_password').val();
+            var role = $('#status').val();
+            var image = $('#image').val();
+
+            if((name != '') && (email != '') && (password != '') && (role != '') && (phone != '') && (image != '') && (password == confirm_password)){
+                var fdata = new FormData(this);
+                $.ajax({
+                    url : <?= json_encode(route('admin.store')) ?>,
+                    method : 'POST',
+                    data :fdata,
+                    cache:false,
+                    processData:false,
+                    contentType:false,
+                    success:function (response) {
+                        if(response.flag == 'EXT_NOT_MATCH'){
+                            setSwalAlert('error',"Extension Doesn't match!",response.message);
+                            $('#image').addClass('border-danger');
+                        }else if(response.flag == 'EMAIL_NOT_MATCH'){
+                            $('#email').addClass('border-danger');
+                            $('#emailError').text(response.message);
+                        }else if(response.flag == 'INSERT'){
+                            setSwalAlert('success', 'Good job!', response.message);
+                            $('#addModal').modal('toggle');
+                            $('#name').val('');
+                            $('#email').val('');
+                            $('#phone').val('');
+                            $('#password').val('');
+                            $('#confirm_password').val('');
+                            $('#image').val('');
+                            $('#role').val('');
+                        }
+                    }
+                })
+            }else{
+                console.log(0)
+            }
+        })
     </script>
 
 @stop
@@ -94,23 +139,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addAdminForm">
+                <form id="addAdminForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="name" placeholder="Enter Admin Name">
+                        <input type="text" class="form-control" id="name" placeholder="Enter Admin Name" name="name">
                         <span class="text-danger" id="nameError"></span>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" id="email" placeholder="Enter Admin Email">
+                        <input type="email" class="form-control" id="email" placeholder="Enter Admin Email" name="email">
                         <span class="text-danger" id="emailError"></span>
                     </div>
                     <div class="form-group">
-                        <input type="file" class="form-control" id="image">
+                        <input type="file" class="form-control" id="image" name="image">
                         <span class="text-danger" id="imageError"></span>
                     </div>
                     <div class="row no-gutters">
                         <div class="col-7">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="phone" placeholder="Enter Admin Phone">
+                                <input type="text" name="phone" class="form-control" id="phone" placeholder="Enter Admin Phone">
                                 <span class="text-danger" id="phoneError"></span>
                             </div>
                         </div>
@@ -128,7 +173,7 @@
                     <div class="row no-gutters">
                         <div class="col-6">
                             <div class="form-group">
-                                <input type="password" class="form-control" id="password" placeholder="Enter Admin Password">
+                                <input type="password" class="form-control" id="password" placeholder="Enter Admin Password" name="password">
                                 <span class="text-danger" id="passwordError"></span>
                             </div>
                         </div>
