@@ -87,6 +87,83 @@ $(document).ready(function () {
         }
     });
 
+    $('#addAdminForm').on('submit',function (e) {
+        e.preventDefault();
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var phone = $('#phone').val();
+        var password = $('#password').val();
+        var password = $('#password').val();
+        var confirm_password = $('#confirm_password').val();
+        var role = $('#status').val();
+        var image = $('#image').val();
+
+        if(name == ''){
+            $('#nameError').text('Field Must not be Empty!');
+            $('#name').addClass('border-danger');
+        }else{
+            $('#nameError').text('');
+            $('#name').removeClass('border-danger');
+        }
+
+        if(email == ''){
+            $('#emailError').text('Field Must not be Empty!');
+            $('#email').addClass('border-danger');
+            flag = false;
+        }else{
+            $('#emailError').text('');
+            $('#email').removeClass('border-danger');
+        }
+
+        if(image == ''){
+            $('#imageError').text('Field Must not be Empty!');
+            $('#image').addClass('border-danger');
+        }else{
+            $('#imageError').text('');
+            $('#image').removeClass('border-danger');
+        }
+
+        if(phone == ''){
+            $('#phoneError').text('Field Must not be Empty!');
+            $('#phone').addClass('border-danger');
+        }else{
+            $('#phoneError').text('');
+            $('#phone').removeClass('border-danger');
+        }
+
+        if(role == ''){
+            $('#statusError').text('Field Must not be Empty!');
+            $('#status').addClass('border-danger');
+        }else{
+            $('#statusError').text('');
+            $('#status').removeClass('border-danger');
+        }
+
+        if(password == ''){
+            $('#passwordError').text('Field Must not be Empty!');
+            $('#password').addClass('border-danger');
+        }else{
+            $('#passwordError').text('');
+            $('#password').removeClass('border-danger');
+        }
+
+        if(confirm_password == ''){
+            $('#confirm_passwordError').text('Field Must not be Empty!');
+            $('#confirm_password').addClass('border-danger');
+        }else{
+            $('#confirm_passwordError').text('');
+            $('#confirm_password').removeClass('border-danger');
+        }
+
+        if(password != confirm_password){
+            $('#confirm_passwordError').text('Password Doesnt match!');
+            $('#confirm_password').addClass('border-danger');
+        }else{
+            $('#confirm_passwordError').text('');
+            $('#confirm_password').removeClass('border-danger');
+        }
+    });
+
 });
 function setSwalAlert(mode,title,text) {
     Swal.fire({

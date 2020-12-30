@@ -146,7 +146,6 @@
             $('body').on('click', '#makeInactive', function (event) {
                 event.preventDefault();
                 var id = $(this).attr('data-id');
-                var URL = 'http://localhost/Laravel/Laravel_Portfolio/public/admin/category/status-inactive';
 
                 $.ajax(
                     {

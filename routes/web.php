@@ -65,6 +65,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('status-inactive', 'backend\ProductController@makeInactive')->name('product.status.inactive');
     });
 
+    #Admin Routes
+    Route::prefix('admin')->group(function () {
+        Route::get('index', 'backend\AdminController@index')->name('admin.index');
+        Route::get('fetch', 'backend\AdminController@getAllAdmin')->name('admin.fetch');
+        Route::post('store', 'backend\AdminController@store')->name('admin.store');
+        Route::get('edit', 'backend\AdminController@edit')->name('admin.edit');
+        Route::put('update', 'backend\AdminController@update')->name('admin.update');
+        Route::delete('delete', 'backend\AdminController@destroy')->name('admin.delete');
+        Route::put('status-active', 'backend\AdminController@makeActive')->name('admin.status.active');
+        Route::put('status-inactive', 'backend\AdminController@makeInactive')->name('admin.status.inactive');
+    });
+
 });
 
 

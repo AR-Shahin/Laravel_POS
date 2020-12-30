@@ -32,7 +32,16 @@
                     <li><a href="{{route('product.index')}}">Product</a></li>
                 </ul>
             </li>
-
+            <li class="sub-menu">
+                <a href="javascript:;" >
+                    <i class="fa fa-users"></i>
+                    <span>Admin</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{{route('admin.index')}}">Admin</a></li>
+                    <li><a href="{{route('admin.index')}}">Profile</a></li>
+                </ul>
+            </li>
         </ul>
         <!-- sidebar menu end-->
     </div>
