@@ -60,7 +60,10 @@
                 rows+= '</td>';
                 rows+= '<td data-id="'+value.id+'" class="text-center">';
                 rows+= '<a class="btn btn-sm btn-info text-light" id="editRow" data-id="'+value.id+'" data-toggle="modal" data-target="#editModal">Edit</a> ';
-                rows+= '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="'+value.id+'" >Delete</a> ';
+                if(<?= Auth::user()->id?> != value.id)
+                {
+                    rows += '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="' + value.id + '" >Delete</a> ';
+                }
                 rows+= '</td>';
                 rows+= '</tr>';
             });
@@ -79,7 +82,6 @@
             })
         }
         getAllAdmin();
-
         //store
         $('#addAdminForm').on('submit',function (e) {
             e.preventDefault();
@@ -101,13 +103,19 @@
                     processData:false,
                     contentType:false,
                     success:function (response) {
+                        console.log(response);
                         if(response.flag == 'EXT_NOT_MATCH'){
                             setSwalAlert('error',"Extension Doesn't match!",response.message);
                             $('#image').addClass('border-danger');
                         }else if(response.flag == 'EMAIL_NOT_MATCH'){
                             $('#email').addClass('border-danger');
                             $('#emailError').text(response.message);
-                        }else if(response.flag == 'INSERT'){
+                        }
+                        else if(response.flag == 'BIG_SIZE'){
+                            $('#image').addClass('border-danger');
+                            $('#imageError').text(response.message);
+                        }
+                        else if(response.flag == 'INSERT'){
                             setSwalAlert('success', 'Good job!', response.message);
                             $('#addModal').modal('toggle');
                             $('#name').val('');
@@ -123,6 +131,57 @@
             }else{
                 console.log(0)
             }
+        })
+        //Delete Admin
+        $('body').on('click','#deleteRow',function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success mx-2',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                $.ajax({
+                    url : <?= json_encode(route('admin.delete'))?>,
+                    type : 'DELETE',
+                    data : {id : id},
+                    success : function (response) {
+                        getAllAdmin();
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            response.message,
+                            'success'
+                        )
+                    },
+                    error : function (e) {
+                        console.log(e);
+                    }
+                })
+
+            } else if (
+                    /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your file is safe :)',
+                    'error'
+                )
+            }
+        })
         })
     </script>
 

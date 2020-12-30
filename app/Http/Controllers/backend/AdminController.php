@@ -5,11 +5,14 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use const false;
+use function file_exists;
 use Illuminate\Http\Request;
 use function in_array;
 use function response;
 use const true;
 use Illuminate\Support\Facades\Hash;
+use function unlink;
+
 class AdminController extends Controller
 {
     private function isPermittedExtension($ext){
@@ -29,8 +32,11 @@ class AdminController extends Controller
 
     public function destroy(Request $request)
     {
-        $sup = User::find($request->id);
-        if($sup->delete()){
+        $ob = User::findorFail($request->id);
+        $img = $ob->image;
+        $admin = User::find($request->id);
+        if($admin->delete()){
+            if(file_exists($img)){unlink($img);}
             return response()->json([
                 'message' => 'Data deleted successfully!'
             ]);
@@ -51,6 +57,12 @@ class AdminController extends Controller
             return response()->json([
                 'flag' =>'EXT_NOT_MATCH',
                 'message' => 'Extension Should be jpg,png,jpeg!'
+            ]);
+        }
+        if(filesize($request->image)>=2000000){
+            return response()->json([
+                'flag' =>'BIG_SIZE',
+                'message' => 'Image Size Should be smaller than 2MB!'
             ]);
         }
         $name =  hexdec(uniqid()) . '.' .$ext;
