@@ -243,7 +243,7 @@
                     console.log(e)
                 }
             });
-        })
+        });
     </script>
 @stop
 

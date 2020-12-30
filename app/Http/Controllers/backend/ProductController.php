@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -46,7 +47,7 @@ class ProductController extends Controller
             $product->category_id = $request->category_id;
             $product->supplier_id = $request->supplier_id;
             $product->unit_id = $request->unit_id;
-            $product->user_id = 1;
+            $product->user_id = Auth::user()->id;
 
             if($product->save()){
                 return response()->json([

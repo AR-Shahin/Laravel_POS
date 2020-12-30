@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function response;
 
 class CategoryController extends Controller
@@ -37,7 +38,7 @@ class CategoryController extends Controller
         }else{
             $unit = new Category();
             $unit->name = ucwords($request->name);
-            $unit->created_by = 1;
+            $unit->created_by = Auth::user()->id;
             if($unit->save()){
                 return response()->json([
                     'message' => 'Data Save successfully!',
@@ -77,7 +78,7 @@ class CategoryController extends Controller
         }else{
             $unit = Category::find($request->id);
             $unit->name = ucwords($request->name);
-            $unit->updated_by = 1;
+            $unit->updated_by = Auth::user()->id;
             if($unit->save()){
                 return response()->json([
                     'message' => 'Data Updated successfully!',

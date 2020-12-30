@@ -133,6 +133,7 @@
                         success: function (response){
                             if(response == 'SUCCESS'){
                                 getAllUnits();
+                                setNotifyAlert('Status Active Successfully!','success');
                             }
                         },
                         error : function (e) {
@@ -157,6 +158,7 @@
                         success: function (response) {
                             if (response == 'SUCCESS') {
                                 getAllUnits();
+                                setNotifyAlert('Status Inactive Successfully!','success');
                             }
                         },
                         error: function (e) {

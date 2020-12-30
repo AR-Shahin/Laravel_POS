@@ -117,6 +117,7 @@
                         }
                         else if(response.flag == 'INSERT'){
                             setSwalAlert('success', 'Good job!', response.message);
+                            getAllAdmin();
                             $('#addModal').modal('toggle');
                             $('#name').val('');
                             $('#email').val('');

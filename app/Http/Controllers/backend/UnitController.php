@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function response;
 use function strtoupper;
 use function view;
@@ -39,7 +40,7 @@ class UnitController extends Controller
         }else{
             $unit = new Unit();
             $unit->name = strtoupper($request->name);
-            $unit->created_by = 1;
+            $unit->created_by = Auth::user()->id;
             if($unit->save()){
                 return response()->json([
                     'message' => 'Data deleted successfully!',
@@ -78,7 +79,7 @@ class UnitController extends Controller
         }else{
             $unit = Unit::find($request->id);
             $unit->name = strtoupper($request->name);
-            $unit->updated_by = 1;
+            $unit->updated_by = Auth::user()->id;
             if($unit->save()){
                 return response()->json([
                     'message' => 'Unit Updated successfully!',
