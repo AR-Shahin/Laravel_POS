@@ -18,7 +18,6 @@
                                 <th>SL</th>
                                 <th>Name</th>
                                 <th>Category</th>
-                                <th>Unit</th>
                                 <th>Quantity</th>
                                 <th>Supplier</th>
                                 <th>Added By</th>
@@ -62,8 +61,7 @@
                 rows+= '<td>'+ ++i +'</td>';
                 rows+= '<td>'+ value.name +'</td>';
                 rows+= '<td>'+ value.category.name +'</td>';
-                rows+= '<td class="text-center">'+ value.unit.name+'</td>';
-                rows+= '<td class="text-center">'+ value.quantity +'</td>';
+                rows+= '<td class="text-center">'+ value.quantity +' ('+value.unit.name +')' +'</td>';
                 rows+= '<td>'+ value.supplier.name +'</td>';
                 rows+= '<td>'+ value.user.name +'</td>';
                 rows+= '<td class="text-center">';
@@ -162,7 +160,7 @@
             return false;
         });
 
-        //Delete Unit
+        //Delete
         $('body').on('click','#deleteRow',function (e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
@@ -213,6 +211,51 @@
             }
         })
         })
+
+        //Edit
+        $('body').delegate('#editRow','click',function (e) {
+            e.preventDefault();
+            $("#e_productError").text('');
+            $('#e_product').removeClass('border-danger');
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url : <?= json_encode(route('product.edit'))?>,
+                type : 'GET',
+                data : {id : id},
+                success : function (response) {
+                    $('#e_id').val(response.id);
+                    $('#e_product').val(response.name);
+                    $('#e_supplier_id').val(response.supplier.id);
+                    $('#e_category_id').val(response.category.id);
+                    $('#e_unit_id').val(response.unit.id);
+                },
+                error : function (e) {
+                    console.log(e);
+                }
+            })
+
+        })
+
+        $('#updateProductForm').on('submit',function (e) {
+            e.preventDefault();
+            $.ajax({
+                url : <?= json_encode(route('product.update'))?>,
+                method:'PUT',
+                data: $('#updateProductForm').serialize(),
+                success:function (response) {
+                    if(response.flag == 'UPDATE') {
+                        setSwalAlert('success', 'Good job!', response.message);
+                        $('#editModal').modal('toggle');
+                        getAllProduct();
+                        $("#e_product").val('');
+                    }
+                },
+                error : function (e) {
+                    console.log(e)
+                }
+            });
+        })
+
     </script>
 @stop
 
@@ -278,35 +321,56 @@
 
 <!--Edit  Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="updateCustomerForm">
+                <form id="updateProductForm">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" id="e_id" name="id">
-                        <input type="text" name="name" class="form-control" id="e_name" placeholder="Enter Suppler Name">
-                        <span class="text-danger" id="e_nameError"></span>
+                        <select name="supplier_id" id="e_supplier_id" class="form-control">
+                            <option value="">Select Supplier</option>
+                            @foreach($suppliers as $supplier)
+                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                            @endforeach
+                        </select>
+                        <span class="text-danger" id="e_supplierError"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <select name="category_id" id="e_category_id" class="form-control">
+                                    <option value="">Select Category</option>
+                                    @foreach($cats as $cat)
+                                        <option value="{{$cat->id}}">{{$cat->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="e_categoryError"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <select name="unit_id" id="e_unit_id" class="form-control">
+                                    <option value="">Select Unit</option>
+                                    @foreach($units as $unit)
+                                        <option value="{{$unit->id}}">{{$unit->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="e_unitError"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" id="e_email" placeholder="Enter Suppler Email" name="email">
-                        <span class="text-danger" id="e_emailError"></span>
+                        <input type="text" class="form-control" id="e_product" placeholder="Enter Product Name" name="name">
+                        <input type="hidden" name="id" id="e_id">
+                        <span class="text-danger" id="e_productError"></span>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="e_phone" placeholder="Enter Suppler Phone" name="phone">
-                        <span class="text-danger" id="e_phoneError"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="e_address" placeholder="Enter Suppler Address" name="address">
-                        <span class="text-danger" id="e_addressError"></span>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-success btn-block">Update Customer</button>
+                        <button class="btn btn-success btn-block">Add New Product</button>
                     </div>
                 </form>
             </div>

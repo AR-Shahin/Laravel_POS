@@ -59,32 +59,17 @@ class ProductController extends Controller
     }
 
     public function edit(Request $request){
-        $sup = Product::find($request->id);
+        $sup = Product::with(['category','unit','user','supplier'])->find($request->id);
         return response()->json($sup);
     }
 
     public function update(Request $request){
-        $email = Product::where('email',$request->email)->first();
-        $phone = Product::where('phone',$request->phone)->first();
-        if($email){
+        $up = Product::find($request->id)->update($request->all());
+        if($up){
             return response()->json([
-                'flag' => 'Email_EXIST',
-                'message' => 'Email Already Taken.'
+                'message' => 'Data Updated successfully!',
+                'flag' => 'UPDATE',
             ]);
-        }
-        elseif($phone){
-            return response()->json([
-                'flag' => 'Phone_EXIST',
-                'message' => 'Phone Already Taken.'
-            ]);
-        }else{
-            $up = Product::find($request->id)->update($request->all());
-            if($up){
-                return response()->json([
-                    'message' => 'Data Updated successfully!',
-                    'flag' => 'UPDATE',
-                ]);
-            }
         }
     }
 
