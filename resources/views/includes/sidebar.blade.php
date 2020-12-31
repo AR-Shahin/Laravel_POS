@@ -42,6 +42,16 @@
                     <li><a href="{{route('admin.index')}}">Profile</a></li>
                 </ul>
             </li>
+            <li class="sub-menu">
+                <a href="javascript:;" >
+                    <i class="fa fa-tasks"></i>
+                    <span>Purchase</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{{route('purchase.index')}}">Manage Purchase</a></li>
+                    <li><a href="{{route('admin.index')}}">Profile</a></li>
+                </ul>
+            </li>
         </ul>
         <!-- sidebar menu end-->
     </div>

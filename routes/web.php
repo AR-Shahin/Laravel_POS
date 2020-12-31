@@ -10,6 +10,8 @@ Route::get('login','backend\LoginController@showLoginForm')->name('admin.login')
 Route::post('login','backend\LoginController@login')->name('admin.login');
 
 Route::middleware(['auth'])->group(function () {
+    #Auth Routes
+    Route::get('logout','backend\LoginController@logout')->name('logout');
     #Dashboard
     Route::get('dashboard', 'backend\DashboardController@dashboard')->name('dashboard');
 
@@ -76,6 +78,23 @@ Route::middleware(['auth'])->group(function () {
         Route::put('status-active', 'backend\AdminController@makeActive')->name('admin.status.active');
         Route::put('status-inactive', 'backend\AdminController@makeInactive')->name('admin.status.inactive');
     });
+
+    #Purchase Routes
+    Route::prefix('purchase')->group(function () {
+        Route::get('index', 'backend\PurchaseController@index')->name('purchase.index');
+        Route::get('fetch', 'backend\AdminController@getAllAdmin')->name('purchase.fetch');
+        Route::post('store', 'backend\AdminController@store')->name('purchase.store');
+        Route::get('edit', 'backend\AdminController@edit')->name('purchase.edit');
+        Route::put('update', 'backend\AdminController@update')->name('purchase.update');
+        Route::delete('delete', 'backend\AdminController@destroy')->name('purchase.delete');
+        Route::put('status-active', 'backend\AdminController@makeActive')->name('purchase.status.active');
+        Route::put('status-inactive', 'backend\AdminController@makeInactive')->name('purchase.status.inactive');
+    });
+
+    #Default Routes
+    Route::get('get-all-suppliers','backend\DefaultController@getAllSuppliers')->name('get.suppliers');
+    Route::get('get-all-category','backend\DefaultController@getAllCategory')->name('get.categories');
+    Route::get('get-all-products','backend\DefaultController@getAllProduct')->name('get.purchase.products');
 
 });
 
