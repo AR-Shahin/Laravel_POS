@@ -89,6 +89,7 @@
     <script>
         $('body').on('click','#addNewRow',function (e) {
             e.preventDefault();
+            calculateTotalAmount();
             var date = $('#date').val();
             var purchase_no = $('#purchase_no').val();
             var supplier_id = $('#supplier_id').val();
@@ -146,7 +147,34 @@
             $('body').on('click','.remove_row',function (e) {
                 e.preventDefault();
                 $(this).closest('.delete_add_more_item').remove();
-            })
+                calculateTotalAmount();
+            });
+
+            $('body').on('keyup click','.buying_qty',function () {
+                var unit_price = $(this).closest('tr').find('input.unit_price').val();
+                var qty = $(this).closest('tr').find('input.buying_qty').val();
+                var total = unit_price * qty;
+                $(this).closest('tr').find('input.buying_price').val(total);
+                calculateTotalAmount();
+            });
+            $('body').on('keyup click','.unit_price',function () {
+                var unit_price = $(this).closest('tr').find('input.unit_price').val();
+                var qty = $(this).closest('tr').find('input.buying_qty').val();
+                var total = unit_price * qty;
+                $(this).closest('tr').find('input.buying_price').val(total);
+                calculateTotalAmount();
+            });
+            function calculateTotalAmount() {
+                console.log('okk');
+                var sum = 0;
+                $('.buying_price').each(function () {
+                    var value = $(this).val();
+                    if(!isNaN(value) && value.lenght != 0){
+                        sum+= parseFloat(value);
+                    }
+                });
+                $('#subTotal').val(sum);
+            }
         })
     </script>
 
@@ -238,7 +266,7 @@
                                 <th width="4%">Quantity</th>
                                 <th width="10%">Unit Price</th>
                                 <th width="25%">Description</th>
-                                <th width="10%">Total</th>
+                                <th width="15%">Total</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -249,8 +277,8 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="5" class="text-right">Total</th>
-                                <td colspan="2"><span id="">0.0</span></td>
+                                <th colspan="5" class="text-right"><span class="mt-3 d-block">Total</span></th>
+                                <td colspan="2"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price" readonly></td>
                             </tr>
                             <tr>
                                 <th colspan="7"><button class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Purchase</button></th>

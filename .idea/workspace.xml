@@ -37,8 +37,8 @@
       <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/backend/purchase/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="145" column="45" lean-forward="false" selection-start-line="145" selection-start-column="45" selection-end-line="145" selection-end-column="45" />
+            <state relative-caret-position="203">
+              <caret line="268" column="45" lean-forward="false" selection-start-line="268" selection-start-column="45" selection-end-line="268" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -472,12 +472,12 @@
       <workItem from="1609242363281" duration="4230000" />
       <workItem from="1609249154152" duration="5804000" />
       <workItem from="1609295153739" duration="18871000" />
-      <workItem from="1609386652940" duration="12377000" />
+      <workItem from="1609386652940" duration="13488000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76355000" />
+    <option name="totallyTimeSpent" value="77466000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="2" width="1378" height="743" extended-state="0" />
@@ -901,8 +901,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/backend/purchase/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="145" column="45" lean-forward="false" selection-start-line="145" selection-start-column="45" selection-end-line="145" selection-end-column="45" />
+        <state relative-caret-position="203">
+          <caret line="268" column="45" lean-forward="false" selection-start-line="268" selection-start-column="45" selection-end-line="268" selection-end-column="45" />
           <folding />
         </state>
       </provider>
