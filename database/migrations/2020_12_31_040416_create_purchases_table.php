@@ -18,7 +18,7 @@ class CreatePurchasesTable extends Migration
             $table->foreignId('supplier_id');
             $table->foreignId('product_id');
             $table->foreignId('category_id');
-            $table->foreignId('purchase_no');
+            $table->string('purchase_no');
             $table->dateTime('date');
             $table->string('description')->nullable();
             $table->double('buying_quantity');

@@ -76,7 +76,7 @@
                 method : 'GET',
                 data : {category_id:category_id},
                 success :function (response) {
-                    console.log(response.data);
+                    // console.log(response.data);
                     var html = '<option value="">Select a Product</option>';
                     $.each(response.data,function (key,value) {
                         html+= '<option value="'+value.id+'">'+value.name+'</option>';
@@ -165,7 +165,6 @@
                 calculateTotalAmount();
             });
             function calculateTotalAmount() {
-                console.log('okk');
                 var sum = 0;
                 $('.buying_price').each(function () {
                     var value = $(this).val();
@@ -175,7 +174,35 @@
                 });
                 $('#subTotal').val(sum);
             }
-        })
+        });
+
+        $('#addPurchaseForm').on('submit',function (e) {
+            e.preventDefault();
+            $.ajax({
+                url : <?= json_encode(route('purchase.store'))?>,
+                method :'POST',
+                data : $(this).serialize(),
+                success:function (response) {
+                    if(response.flag == 'EMPTY'){
+                        setSwalAlert('info','Warning!',response.message);
+                    }else if(response.flag == 'INSERT'){
+                        setSwalAlert('success','Success!',response.message);
+                        $('#addModal').modal('toggle');
+                        //get all function
+                        $('#purchase_no').val('');
+                        $('#supplier_id').val('');
+                        $('#category_id').val('');
+                        $('#product_id').val('');
+                        $('#addRow').html('');
+                        $('#subTotal').val(0.0);
+                    }
+                },
+                error:function (e) {
+                    setSwalAlert('error','error!','Data  error!');
+                }
+            })
+
+        });
     </script>
 
     <script id="document-template" type="text/x-handlebars-template">
@@ -257,7 +284,7 @@
                 </div>
                 <hr>
                 <div class="card">
-                    <form action="">
+                    <form id="addPurchaseForm">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -278,7 +305,7 @@
                             <tfoot>
                             <tr>
                                 <th colspan="5" class="text-right"><span class="mt-3 d-block">Total</span></th>
-                                <td colspan="2"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price" readonly></td>
+                                <td colspan="2"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price[]" readonly></td>
                             </tr>
                             <tr>
                                 <th colspan="7"><button class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Purchase</button></th>
