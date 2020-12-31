@@ -26,7 +26,8 @@
     <link href="{{asset('backend')}}/css/style.css" rel="stylesheet">
     <link href="{{asset('backend')}}/css/style-responsive.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script type="text/javascript" language="javascript" src="{{asset('backend')}}/assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="{{asset('backend')}}/assets/data-tables/DT_bootstrap.js"></script>
     <!--dynamic table initialization -->

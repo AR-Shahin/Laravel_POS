@@ -270,7 +270,7 @@
             <div class="modal-body">
                 <form id="addProductForm">
                     <div class="form-group">
-                        <select name="supplier_id" id="supplier_id" class="form-control">
+                        <select name="supplier_id" id="supplier_id" class="form-control select2">
                             <option value="">Select Supplier</option>
                             @foreach($suppliers as $supplier)
                                 <option value="{{$supplier->id}}">{{$supplier->name}}</option>
@@ -281,7 +281,7 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <select name="category_id" id="category_id" class="form-control">
+                                <select name="category_id" id="category_id" class="form-control select2">
                                     <option value="">Select Category</option>
                                     @foreach($cats as $cat)
                                         <option value="{{$cat->id}}">{{$cat->name}}</option>
@@ -292,7 +292,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <select name="unit_id" id="unit_id" class="form-control">
+                                <select name="unit_id" id="unit_id" class="form-control select2">
                                     <option value="">Select Unit</option>
                                     @foreach($units as $unit)
                                         <option value="{{$unit->id}}">{{$unit->name}}</option>
@@ -303,7 +303,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="product" placeholder="Enter Product Name" name="name">
+                        <input type="text" class="form-control form-control-sm" id="product" placeholder="Enter Product Name" name="name">
                         <span class="text-danger" id="productError"></span>
                     </div>
                     <div class="form-group">

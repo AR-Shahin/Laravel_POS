@@ -163,6 +163,7 @@ $(document).ready(function () {
             $('#confirm_password').removeClass('border-danger');
         }
     });
+    $('.select2').select2();
 });
 function setSwalAlert(mode,title,text) {
     Swal.fire({
@@ -175,3 +176,4 @@ function setSwalAlert(mode,title,text) {
 function setNotifyAlert(msg,mode) {
     $.notify(msg, mode);
 }
+

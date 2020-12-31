@@ -239,19 +239,19 @@
                     <div class="col-12 col-md-3">
                         <div class="form-group">
                             <label for="">Date : </label>
-                            <input type="date" class="form-control" name="date" id="date" value="{{date('Y-m-d')}}">
+                            <input type="date" class="form-control form-control-sm" name="date" id="date" value="{{date('Y-m-d')}}">
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
                         <div class="form-group">
                             <label for="">Purchase No : </label>
-                            <input type="text" class="form-control" name="purchase_no" id="purchase_no" placeholder="Enter Purchase Number">
+                            <input type="text" class="form-control form-control-sm" name="purchase_no" id="purchase_no" placeholder="Enter Purchase Number">
                         </div>
                     </div>
                     <div class="col-12 col-md-5">
                         <div class="form-group">
                             <label for="">Supplier Name : </label>
-                            <select name="supplier_id" id="supplier_id" class="form-control">
+                            <select name="supplier_id" id="supplier_id" class="form-control select2">
                                 <option value="">Select a Supplier</option>
                             </select>
                         </div>
@@ -261,7 +261,7 @@
                     <div class="col-12 col-md-4">
                         <div class="form-group">
                             <label for="">Category : </label>
-                            <select name="category_id" id="category_id" class="form-control">
+                            <select name="category_id" id="category_id" class="form-control select2">
                                 <option value="">Select a Category</option>
                             </select>
                         </div>
@@ -269,14 +269,14 @@
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="">Product : </label>
-                            <select name="product_id" id="product_id" class="form-control">
+                            <select name="product_id" id="product_id" class="form-control select2">
                                 <option value="">Select a Product</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-2">
                         <div class="form-group">
-                            <button class="btn btn-sm btn-success addNewRow" style="margin-top: 35px" id="addNewRow"><i class="fa fa-plus-circle"></i></button>
+                            <button class="btn btn-sm btn-success addNewRow" style="margin-top: 28px" id="addNewRow"><i class="fa fa-plus-circle"></i></button>
                         </div>
                     </div>
                 </div>
