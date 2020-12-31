@@ -33,9 +33,6 @@
             </div>
         </div>
     </div>
-    <script>
-        $('#supplierTable').dataTable();
-    </script>
 
     <script>
         $(function () {
@@ -49,6 +46,7 @@
                         html+= '<option value="'+value.id+'">'+value.name+'</option>';
                     });
                     $('#supplier_id').html(html);
+                    $('#supplierTable').dataTable();
                 }
             })
         });

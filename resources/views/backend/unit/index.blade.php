@@ -15,7 +15,8 @@
                                 <th>Status</th>
                                 <th class="">Actions</th>
                             </tr>
-                            <tbody id="unitTable"></tbody>
+                            <tbody id="unitTable">
+                            </tbody>
                             </thead>
                         </table>
                     </div>
@@ -51,10 +52,6 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('#unit_table').dataTable( {
-                "aaSorting": [[ 4, "desc" ]]
-            } );
-
             //Fetch Unit
             getAllUnits();
             function getAllUnits() {
@@ -92,6 +89,7 @@
                     rows = rows + '</tr>';
                 });
                 $("#unitTable").html(rows);
+                $('#unit_table').dataTable();
             }
 
             //Store Unit

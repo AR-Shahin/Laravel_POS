@@ -34,10 +34,6 @@
         </div>
     </div>
     <script>
-        $('#supplierTable').dataTable();
-    </script>
-
-    <script>
         //Get Suppliers
         function table_data_row(data) {
             var rows = '';
@@ -57,6 +53,7 @@
             });
 
             $('#supplierBody').html(rows);
+            $('#supplierTable').dataTable();
         }
         function getAllSuppliers() {
             $.ajax({

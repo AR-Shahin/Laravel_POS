@@ -36,10 +36,6 @@
         </div>
     </div>
     <script>
-        $('#supplierTable').dataTable();
-    </script>
-
-    <script>
         //Fetch
         getAllProduct();
         function getAllProduct() {
@@ -79,7 +75,7 @@
 
             });
             $('#productBody').html(rows);
-
+            $('#supplierTable').dataTable();
         }
         //Store
         $('#addProductForm').on('submit',function (e) {

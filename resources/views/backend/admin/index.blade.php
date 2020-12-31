@@ -34,11 +34,6 @@
         </div>
     </div>
     <script>
-        $('#supplierTable').dataTable();
-    </script>
-
-
-    <script>
         //Get Admin
         function table_data_row(data) {
             var rows = '';
@@ -69,6 +64,7 @@
             });
 
             $('#AdminBody').html(rows);
+            $('#supplierTable').dataTable();
         }
         function getAllAdmin() {
             $.ajax({

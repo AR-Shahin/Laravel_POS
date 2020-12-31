@@ -49,10 +49,6 @@
     </div>
 
     <script>
-        $('#catTable').dataTable();
-    </script>
-
-    <script>
         function table_data_row(data) {
             var	rows = '';
             var i = 0;
@@ -75,6 +71,7 @@
                 rows = rows + '</tr>';
             });
             $("#catBody").html(rows);
+            $('#catTable').dataTable();
         }
         function getAllCategory() {
             $.ajax({
