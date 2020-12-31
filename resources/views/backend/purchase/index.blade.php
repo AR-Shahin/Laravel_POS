@@ -141,8 +141,12 @@
 
             var html = template(data);
             $('#addRow').append(html);
+            $('#defaultText').hide();
 
-
+            $('body').on('click','.remove_row',function (e) {
+                e.preventDefault();
+                $(this).closest('.delete_add_more_item').remove();
+            })
         })
     </script>
 
@@ -160,7 +164,7 @@
             <td><input type="number" min="1" class="form-control unit_price" name="unit_price[]" value=""></td>
             <td><input type="text" class="form-control" name="description[]"></td>
             <td><input type="text" class="form-control buying_price" name="buying_price[]" value="0"></td>
-            <td><button class="btn btn-sm btn-danger removeeventmore"><i class="fa fa-minus-circle"></i></button></td>
+            <td><button class="btn btn-sm btn-danger remove_row"><i class="fa fa-minus-circle"></i></button></td>
         </tr>
 
     </script>
@@ -239,8 +243,8 @@
                             </tr>
                             </thead>
                             <tbody id="addRow" class="addRow">
-                            <tr>
-                                <td colspan="7">Lorem ipsum dolor sit amet.</td>
+                            <tr id="defaultText">
+                                <td colspan="7" class="text-center">Invoice items will be here.</td>
                             </tr>
                             </tbody>
                             <tfoot>
