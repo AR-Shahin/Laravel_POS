@@ -31,7 +31,7 @@ class DefaultController extends Controller
     public function getAllProduct(Request $request){
         return response()->json([
             'flag' => 'OK',
-            'data' => Product::where('category_id',$request->category_id)->get()
+            'data' => Product::where('category_id',$request->category_id)->latest()->get()
         ]);
     }
 
