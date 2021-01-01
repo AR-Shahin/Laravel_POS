@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Purchase;
 use Carbon\Carbon;
 use function count;
@@ -53,6 +54,29 @@ class PurchaseController extends Controller
     public function getAllPurchase(){
         return response(Purchase::with('category','product','supplier')
             -> latest()->get());
+    }
 
+    public function approvePurchaseItem(Request $request){
+     //   return $request->id;
+         $purchase = Purchase::find($request->id);
+         $purchase->status = 1;
+         $purchase->updated_by = Auth::user()->id;
+         if($purchase->save()){
+             $update = Product::where('id',$purchase->product_id)->increment('quantity', $purchase->buying_quantity);
+             if($update){
+                 return response()->json([
+                     'message' => 'Data deleted successfully!'
+                 ]);
+             }
+         }
+    }
+
+    public function destroy(Request $request){
+        $sup = Purchase::find($request->id);
+        if($sup->delete()){
+            return response()->json([
+                'message' => 'Data deleted successfully!'
+            ]);
+        }
     }
 }

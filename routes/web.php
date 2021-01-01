@@ -84,11 +84,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('index', 'backend\PurchaseController@index')->name('purchase.index');
         Route::get('fetch', 'backend\PurchaseController@getAllPurchase')->name('purchase.fetch');
         Route::post('store', 'backend\PurchaseController@store')->name('purchase.store');
-        Route::get('edit', 'backend\AdminController@edit')->name('purchase.edit');
-        Route::put('update', 'backend\AdminController@update')->name('purchase.update');
-        Route::delete('delete', 'backend\AdminController@destroy')->name('purchase.delete');
-        Route::put('status-active', 'backend\AdminController@makeActive')->name('purchase.status.active');
-        Route::put('status-inactive', 'backend\AdminController@makeInactive')->name('purchase.status.inactive');
+        Route::delete('delete', 'backend\PurchaseController@destroy')->name('purchase.destroy');
+        Route::put('approve-purchase', 'backend\PurchaseController@approvePurchaseItem')->name('approve-purchase');
     });
 
     #Default Routes

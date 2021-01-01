@@ -25,7 +25,7 @@
                             </tr>
 
                             <tbody id="purchaseBody">
-<span id="bal"></span>
+                            <span id="bal"></span>
                             </tbody>
                             </thead>
                         </table>
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         getAllPurchase();
         function getAllPurchase() {
@@ -57,7 +57,7 @@
                 rows+= '<td>'+ value.purchase_no +'</td>';
                 rows+= '<td>'+ value.product.name +'</td>';
                 rows+= '<td>'+ value.category.name +'</td>';
-                rows+= '<td class="text-center">'+ value.buying_quantity +" {" + value.product_id  +"}" +'</td>';
+                rows+= '<td class="text-center">'+ value.buying_quantity +'</td>';
                 rows+= '<td>'+ value.supplier.name +'</td>';
                 rows+= '<td class="text-center">';
                 if(value.status == 0){
@@ -65,17 +65,125 @@
                 }else{
                     rows+= ' <button class="badge badge-success" data-id="'+value.id+'" id="makeInactive">Approved</button>';
                 }
-                rows+= '</td>'
-                rows+= '<td data-id="'+value.id+'" class="text-center">';
-                rows+= '<a class="btn btn-sm btn-info text-light" id="editRow" data-id="'+value.id+'" data-toggle="modal" data-target="#editModal">Edit</a> ';
-                rows+= '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="'+value.id+'" >Delete</a> ';
-                rows+= '</td>';
+                rows += '</td>'
+                rows += '<td class="text-center">';
+                if(value.status == 0) {
+                    rows += '<a class="btn btn-sm btn-success text-light" id="approvePurchase" data-id="' + value.id + '">Approve</a> ';
+                    rows += '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="' + value.id + '" >Delete</a> ';
+                }else{
+                    rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.purchase_no + '" ><i class="fa fa-eye"></i> View</a> ';
+                }
+
+                rows += '</td>';
                 rows+= '</tr>';
 
             });
             $('#purchaseBody').html(rows);
             $('#purchaseTable').dataTable();
         }
+
+        $('body').on('click','#approvePurchase',function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success mx-2',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                $.ajax({
+                    url : <?= json_encode(route('approve-purchase'))?>,
+                    type : 'PUT',
+                    data : {id : id},
+                    success : function (response) {
+                        console.log(response);
+                        getAllPurchase();
+                        swalWithBootstrapButtons.fire(
+                            'Approved!',
+                            'Your Purchase has been Approved.',
+                            'success'
+                        )
+                    },
+                    error : function (e) {
+                        console.log(e);
+                    }
+                })
+
+            } else if (
+                    /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'okk :)',
+                    'error'
+                )
+            }
+        })
+        });
+
+        //Delete Unit
+        $('body').on('click','#deleteRow',function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success mx-2',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                $.ajax({
+                    url : <?= json_encode(route('purchase.destroy'))?>,
+                    type : 'DELETE',
+                    data : {id : id},
+                    success : function (response) {
+                        getAllPurchase();
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            response.message,
+                            'success'
+                        )
+                    },
+                    error : function (e) {
+                        console.log(e);
+                    }
+                })
+
+            } else if (
+                    /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your file is safe :)',
+                    'error'
+                )
+            }
+        })
+        })
     </script>
 
     <script>
@@ -229,7 +337,7 @@
                         setSwalAlert('info','Warning!',response.message);
                     }else if(response.flag == 'INSERT'){
                         setSwalAlert('success','Success!',response.message);
-                       $('#addModal').modal('toggle');
+                        $('#addModal').modal('toggle');
                         getAllPurchase();
                         $('#purchase_no').val('');
                         $('#supplier_id').val('');
