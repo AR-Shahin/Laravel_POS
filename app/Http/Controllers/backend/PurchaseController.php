@@ -49,4 +49,10 @@ class PurchaseController extends Controller
             ]);
         }
     }
+
+    public function getAllPurchase(){
+        return response(Purchase::with('category','product','supplier')
+            -> latest()->get());
+
+    }
 }

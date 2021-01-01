@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
     #Purchase Routes
     Route::prefix('purchase')->group(function () {
         Route::get('index', 'backend\PurchaseController@index')->name('purchase.index');
-        Route::get('fetch', 'backend\AdminController@getAllAdmin')->name('purchase.fetch');
+        Route::get('fetch', 'backend\PurchaseController@getAllPurchase')->name('purchase.fetch');
         Route::post('store', 'backend\PurchaseController@store')->name('purchase.store');
         Route::get('edit', 'backend\AdminController@edit')->name('purchase.edit');
         Route::put('update', 'backend\AdminController@update')->name('purchase.update');

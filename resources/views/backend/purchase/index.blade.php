@@ -6,25 +6,26 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="text-info d-inline">Manage Purchase</h4>
-                    <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModal">
+                    <button type="button" class="btn btn-primary pull-right add_modal" data-toggle="modal" data-target="#addModal">
                         <i class="fa fa-plus-circle mr-1"></i> Add New Purchase
                     </button>
                 </div>
                 <div class="card-body">
                     <div class="adv-table">
-                        <table class=" display table table-bordered table-striped" id="supplierTable">
+                        <table class=" display table table-bordered table-striped" id="purchaseTable">
                             <thead>
                             <tr>
-                                <th>SL</th>
+                                <th>P. No</th>
                                 <th>Name</th>
                                 <th>Category</th>
+                                <th>Quantity</th>
                                 <th>Supplier</th>
-                                <th>Unit</th>
+                                <th>Status</th>
                                 <th class="">Actions</th>
                             </tr>
 
-                            <tbody id="supplierBody">
-
+                            <tbody id="purchaseBody">
+<span id="bal"></span>
                             </tbody>
                             </thead>
                         </table>
@@ -33,6 +34,49 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        getAllPurchase();
+        function getAllPurchase() {
+            $.ajax({
+                url : <?= json_encode(route('purchase.fetch'))?>,
+                method : 'GET',
+                data : {},
+                success : function (response) {
+                    console.log(response);
+                    table_data_row(response);
+                }
+            })
+        }
+        //console.log(getAllPurchase());
+        function table_data_row(data) {
+            var rows = '';
+            $.each(data,function (key,value) {
+                console.log(value);
+                rows+= '<tr>';
+                rows+= '<td>'+ value.purchase_no +'</td>';
+                rows+= '<td>'+ value.product.name +'</td>';
+                rows+= '<td>'+ value.category.name +'</td>';
+                rows+= '<td class="text-center">'+ value.buying_quantity +" {" + value.product_id  +"}" +'</td>';
+                rows+= '<td>'+ value.supplier.name +'</td>';
+                rows+= '<td class="text-center">';
+                if(value.status == 0){
+                    rows+= ' <button class="badge badge-danger" data-id="'+value.id+'" id="makeActive">Pending</button>';
+                }else{
+                    rows+= ' <button class="badge badge-success" data-id="'+value.id+'" id="makeInactive">Approved</button>';
+                }
+                rows+= '</td>'
+                rows+= '<td data-id="'+value.id+'" class="text-center">';
+                rows+= '<a class="btn btn-sm btn-info text-light" id="editRow" data-id="'+value.id+'" data-toggle="modal" data-target="#editModal">Edit</a> ';
+                rows+= '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="'+value.id+'" >Delete</a> ';
+                rows+= '</td>';
+                rows+= '</tr>';
+
+            });
+            $('#purchaseBody').html(rows);
+            $('#purchaseTable').dataTable();
+        }
+    </script>
 
     <script>
         $(function () {
@@ -99,31 +143,31 @@
 
             if(purchase_no == ''){
                 setNotifyAlert('Purchase Number field is required!');
-                $('#purchase_no').addClass('border-danger');
+                $('.purchase_no_error').addClass('text-danger');
                 return false;
             }else{
-                $('#purchase_no').removeClass('border-danger');
+                $('.purchase_no_error').removeClass('text-danger');
             }
             if(supplier_id == ''){
                 setNotifyAlert('Supplier field is required!');
-                $('#supplier_id').addClass('border-danger');
+                $('.supplier_id_error').addClass('text-danger');
                 return false;
             }else{
-                $('#supplier_id').removeClass('border-danger');
+                $('.supplier_id_error').removeClass('text-danger');
             }
             if(category_id == ''){
                 setNotifyAlert('Category field is required!');
-                $('#category_id').addClass('border-danger');
+                $('.category_id_error').addClass('text-danger');
                 return false;
             }else{
-                $('#category_id').removeClass('border-danger');
+                $('.category_id_error').removeClass('text-danger');
             }
             if(product_id == ''){
                 setNotifyAlert('Product field is required!');
-                $('#product_id').addClass('border-danger');
+                $('.product_id_error').addClass('text-danger');
                 return false;
             }else{
-                $('#product_id').removeClass('border-danger');
+                $('.product_id_error').removeClass('text-danger');
             }
 
             var source = $('#document-template').html();
@@ -185,8 +229,8 @@
                         setSwalAlert('info','Warning!',response.message);
                     }else if(response.flag == 'INSERT'){
                         setSwalAlert('success','Success!',response.message);
-                        $('#addModal').modal('toggle');
-                        //get all function
+                       $('#addModal').modal('toggle');
+                        getAllPurchase();
                         $('#purchase_no').val('');
                         $('#supplier_id').val('');
                         $('#category_id').val('');
@@ -244,13 +288,13 @@
                     </div>
                     <div class="col-12 col-md-4">
                         <div class="form-group">
-                            <label for="">Purchase No : </label>
+                            <label for="" class="purchase_no_error">Purchase No : </label>
                             <input type="text" class="form-control form-control-sm" name="purchase_no" id="purchase_no" placeholder="Enter Purchase Number">
                         </div>
                     </div>
                     <div class="col-12 col-md-5">
                         <div class="form-group">
-                            <label for="">Supplier Name : </label>
+                            <label for="" class="supplier_id_error">Supplier Name : </label>
                             <select name="supplier_id" id="supplier_id" class="form-control select2">
                                 <option value="">Select a Supplier</option>
                             </select>
@@ -260,7 +304,7 @@
                 <div class="row">
                     <div class="col-12 col-md-4">
                         <div class="form-group">
-                            <label for="">Category : </label>
+                            <label for="" class="category_id_error">Category : </label>
                             <select name="category_id" id="category_id" class="form-control select2">
                                 <option value="">Select a Category</option>
                             </select>
@@ -268,7 +312,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label for="">Product : </label>
+                            <label for="" class="product_id_error">Product : </label>
                             <select name="product_id" id="product_id" class="form-control select2">
                                 <option value="">Select a Product</option>
                             </select>
