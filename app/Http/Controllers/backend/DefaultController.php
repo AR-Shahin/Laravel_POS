@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -32,6 +33,20 @@ class DefaultController extends Controller
         return response()->json([
             'flag' => 'OK',
             'data' => Product::where('category_id',$request->category_id)->latest()->get()
+        ]);
+    }
+
+    public function getAllCategoryForInvoiceModal(){
+        return response()->json([
+            'flag' => 'OK',
+            'data' => Category::has('products')->select('id','name')->latest()->get()
+        ]);
+    }
+
+    public function getProductQuantity(Request $request){
+        return response()->json([
+            'status' => 200,
+            'data' => Product::find($request->product_id)->quantity
         ]);
     }
 

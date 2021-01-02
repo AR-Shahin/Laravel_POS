@@ -1,13 +1,13 @@
 @extends('layouts.master')
-@section('title','Purchase')
+@section('title','Invoice')
 @section('main_content')
     <div class="row no-gutters">
         <div class="col-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="text-info d-inline">Manage Purchase</h4>
+                    <h4 class="text-info d-inline">Manage Invoice</h4>
                     <button type="button" class="btn btn-primary pull-right add_modal" data-toggle="modal" data-target="#addModal">
-                        <i class="fa fa-plus-circle mr-1"></i> Add New Purchase
+                        <i class="fa fa-plus-circle mr-1"></i> Add New Invoice
                     </button>
                 </div>
                 <div class="card-body">
@@ -25,7 +25,7 @@
                                 <th class="">Actions</th>
                             </tr>
 
-                            <tbody id="purchaseBody">
+                            <tbody id="invoiceBody">
                             </tbody>
                             </thead>
                         </table>
@@ -190,36 +190,20 @@
     <script>
         $(function () {
             $.ajax({
-                url : <?= json_encode(route('get.suppliers'))?>,
+                url : <?= json_encode(route('get.categories.invoice'))?>,
                 method : 'GET',
                 data : {},
                 success :function (response) {
-                    var html = '<option value="">Select a Supplier</option>';
+                    var html = '<option value="">Select a Category</option>';
                     $.each(response.data,function (key,value) {
                         html+= '<option value="'+value.id+'">'+value.name+'</option>';
                     });
-                    $('#supplier_id').html(html);
-                    $('#supplierTable').dataTable();
+                    $('#category_id').html(html);
+                    // $('#supplierTable').dataTable();
                 }
             })
         });
 
-        $('body').on('change','#supplier_id',function () {
-            var supplier_id = $(this).val();
-            $.ajax({
-                url : <?= json_encode(route('get.categories'))?>,
-                method : 'GET',
-                data : {supplier_id:supplier_id},
-                success :function (response) {
-                    console.log(response.data);
-                    var html = '<option value="">Select a Category</option>';
-                    $.each(response.data,function (key,value) {
-                        html+= '<option value="'+value.category.id+'">'+value.category.name+'</option>';
-                    });
-                    $('#category_id').html(html);
-                }
-            })
-        });
         $('body').on('change','#category_id',function () {
             var category_id = $(this).val();
             $.ajax({
@@ -236,13 +220,26 @@
                 }
             })
         });
+
+        $('body').on('change','#product_id',function () {
+            var product_id = $(this).val();
+            $.ajax({
+                url :<?= json_encode(route('product.quantity'))?>,
+                type : 'GET',
+                data : {product_id : product_id},
+                success:function (response) {
+                    $('#product_available').val(response.data);
+                }
+            })
+        })
+
     </script>
     <script>
         $('body').on('click','#addNewRow',function (e) {
             e.preventDefault();
             calculateTotalAmount();
             var date = $('#date').val();
-            var purchase_no = $('#purchase_no').val();
+            var invoice_no = $('#invoice_no').val();
             var supplier_id = $('#supplier_id').val();
             var category_id = $('#category_id').val();
             var categoryName = $('#category_id').find('option:selected').text();
@@ -250,20 +247,6 @@
             var productName = $('#product_id').find('option:selected').text();
             //console.log(date + purchase_no + supplier_id + category_id + categoryName + product_id + productName);
 
-            if(purchase_no == ''){
-                setNotifyAlert('Purchase Number field is required!');
-                $('.purchase_no_error').addClass('text-danger');
-                return false;
-            }else{
-                $('.purchase_no_error').removeClass('text-danger');
-            }
-            if(supplier_id == ''){
-                setNotifyAlert('Supplier field is required!');
-                $('.supplier_id_error').addClass('text-danger');
-                return false;
-            }else{
-                $('.supplier_id_error').removeClass('text-danger');
-            }
             if(category_id == ''){
                 setNotifyAlert('Category field is required!');
                 $('.category_id_error').addClass('text-danger');
@@ -283,8 +266,7 @@
             var template = Handlebars.compile(source);
             var data = {
                 date : date,
-                purchase_no : purchase_no,
-                supplier_id : supplier_id,
+                invoice_no : invoice_no,
                 category_id: category_id,
                 category_name : categoryName,
                 product_id : product_id,
@@ -301,23 +283,24 @@
                 calculateTotalAmount();
             });
 
-            $('body').on('keyup click','.buying_qty',function () {
+            $('body').on('keyup click','.selling_qty',function () {
                 var unit_price = $(this).closest('tr').find('input.unit_price').val();
-                var qty = $(this).closest('tr').find('input.buying_qty').val();
+                var qty = $(this).closest('tr').find('input.selling_qty').val();
                 var total = unit_price * qty;
-                $(this).closest('tr').find('input.buying_price').val(total);
+                $(this).closest('tr').find('input.selling_price').val(total);
                 calculateTotalAmount();
             });
             $('body').on('keyup click','.unit_price',function () {
                 var unit_price = $(this).closest('tr').find('input.unit_price').val();
-                var qty = $(this).closest('tr').find('input.buying_qty').val();
+                var qty = $(this).closest('tr').find('input.selling_qty').val();
                 var total = unit_price * qty;
-                $(this).closest('tr').find('input.buying_price').val(total);
+                $(this).closest('tr').find('input.selling_price').val(total);
                 calculateTotalAmount();
             });
+
             function calculateTotalAmount() {
                 var sum = 0;
-                $('.buying_price').each(function () {
+                $('.selling_price').each(function () {
                     var value = $(this).val();
                     if(!isNaN(value) && value.lenght != 0){
                         sum+= parseFloat(value);
@@ -352,24 +335,22 @@
                     setSwalAlert('error','error!','Data  error!');
                 }
             })
-
         });
+
     </script>
 
     <script id="document-template" type="text/x-handlebars-template">
         <tr class="delete_add_more_item" id="delete_add_more_item">
-            <input type="hidden" name="date[]" value="@{{ date }}">
-            <input type="hidden" name="purchase_no[]" value="@{{ purchase_no }}">
-            <input type="hidden" name="supplier_id[]" value="@{{ supplier_id }}">
+            <input type="hidden" name="date" value="@{{ date }}">
+            <input type="hidden" name="invoice_no" value="@{{ invoice_no }}">
             <input type="hidden" name="category_id[]" value="@{{ category_id }}">
             <input type="hidden" name="product_id[]" value="@{{ product_id }}">
 
             <td>@{{category_name}}</td>
             <td>@{{product_name}}</td>
-            <td><input type="number" min="1" class="form-control buying_qty" name="buying_qty[]" value="1"></td>
+            <td><input type="number" min="1" class="form-control selling_qty" name="selling_qty[]" value="1"></td>
             <td><input type="number" min="1" class="form-control unit_price" name="unit_price[]" value=""></td>
-            <td><input type="text" class="form-control" name="description[]"></td>
-            <td><input type="text" class="form-control buying_price" name="buying_price[]" value="0"></td>
+            <td><input type="text" class="form-control selling_price" name="selling_price[]" value="0" readonly></td>
             <td><button class="btn btn-sm btn-danger remove_row"><i class="fa fa-minus-circle"></i></button></td>
         </tr>
 
@@ -382,54 +363,50 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add New Purchase</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add New Invoice</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 col-md-3">
+                <div class="row no-gutters">
+                    <div class="col-12 col-md-1">
+                        <div class="form-group">
+                            <label for="">Invoice No : </label>
+                            <input type="text" class="form-control form-control-sm" name="invoice_no" id="invoice_no" value="{{$invoice_no}}" readonly="">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2">
                         <div class="form-group">
                             <label for="">Date : </label>
                             <input type="date" class="form-control form-control-sm" name="date" id="date" value="{{date('Y-m-d')}}">
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group">
-                            <label for="" class="purchase_no_error">Purchase No : </label>
-                            <input type="text" class="form-control form-control-sm" name="purchase_no" id="purchase_no" placeholder="Enter Purchase Number">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <div class="form-group">
-                            <label for="" class="supplier_id_error">Supplier Name : </label>
-                            <select name="supplier_id" id="supplier_id" class="form-control select2">
-                                <option value="">Select a Supplier</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-2">
                         <div class="form-group">
                             <label for="" class="category_id_error">Category : </label>
-                            <select name="category_id" id="category_id" class="form-control select2">
+                            <select name="category_id" id="category_id" class="form-control form-control-sm select2">
                                 <option value="">Select a Category</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-4">
                         <div class="form-group">
                             <label for="" class="product_id_error">Product : </label>
-                            <select name="product_id" id="product_id" class="form-control select2">
+                            <select name="product_id" id="product_id" class="form-control select2 form-control-sm">
                                 <option value="">Select a Product</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-2">
+                    <div class="col-12 col-md-1">
                         <div class="form-group">
-                            <button class="btn btn-sm btn-success addNewRow" style="margin-top: 28px" id="addNewRow"><i class="fa fa-plus-circle"></i></button>
+                            <label for="">Available : </label>
+                            <input type="text" class="form-control form-control-sm"  id="product_available" value="" readonly="">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-success addNewRow" style="margin-top: 31px" id="addNewRow"><i class="fa fa-plus-circle"></i></button>
                         </div>
                     </div>
                 </div>
@@ -441,11 +418,10 @@
                             <tr>
                                 <th>Category</th>
                                 <th>Product Name</th>
-                                <th width="4%">Quantity</th>
+                                <th width="10%">Quantity</th>
                                 <th width="10%">Unit Price</th>
-                                <th width="25%">Description</th>
-                                <th width="15%">Total</th>
-                                <th>Actions</th>
+                                <th>Total</th>
+                                <th width="10%">Actions</th>
                             </tr>
                             </thead>
                             <tbody id="addRow" class="addRow">
@@ -453,15 +429,72 @@
                                 <td colspan="7" class="text-center">Invoice items will be here.</td>
                             </tr>
                             </tbody>
-                            <tfoot>
+                            <tbody>
                             <tr>
-                                <th colspan="5" class="text-right"><span class="mt-3 d-block">Total</span></th>
-                                <td colspan="2"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price[]" readonly></td>
+                                <th colspan="4" class="text-right"><span class="mt-3 d-block">Discount</span></th>
+                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="discount" name="discount"></td>
                             </tr>
                             <tr>
-                                <th colspan="7"><button class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Purchase</button></th>
+                                <th colspan="4" class="text-right"><span class="mt-3 d-block">Total</span></th>
+                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price[]" readonly></td>
                             </tr>
-                            </tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="form-group">
+                                        <textarea name="description" id="description" cols="30" rows="2" class="form-control" placeholder="If have any Description..." ></textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="form-group">
+                                        <label for="">Payment : </label>
+                                        <select name="payment_status" id="" class="form-control form-control-sm">
+                                            <option value="">Select an Option</option>
+                                            <option value="">Full Paid</option>
+                                            <option value="">Full Due</option>
+                                            <option value="">Partial Payment</option>
+                                        </select>
+                                        <div class="partial mt-2">
+                                            <input type="text" class="form-control form-control form-control-sm" placeholder="Amount...">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td colspan="3">
+                                    <div class="form-group">
+                                        <label for="">Customer : </label>
+                                        <select name="payment_status" id="" class="form-control form-control-sm">
+                                            <option value="">Select an Option</option>
+                                            <option value="">Full Paid</option>
+                                            <option value="">Full Due</option>
+                                            <option value="">Partial Payment</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="addNewCustomerInvoice">
+                                <td colspan="6">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3">
+                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th colspan="1"><button class="btn btn-sm btn-primary btn-block"><i class="fa fa-plus"></i> Invoice</button></th>
+                            </tr>
+                            </tbody>
                         </table>
                     </form>
                 </div>

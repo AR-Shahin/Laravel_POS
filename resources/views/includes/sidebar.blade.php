@@ -49,7 +49,16 @@
                 </a>
                 <ul class="sub">
                     <li><a href="{{route('purchase.index')}}">Manage Purchase</a></li>
-                    <li><a href="{{route('admin.index')}}">Profile</a></li>
+                </ul>
+            </li>
+
+            <li class="sub-menu">
+                <a href="javascript:;" >
+                    <i class="fa fa-bars"></i>
+                    <span>Invoice</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{{route('invoice.index')}}">Manage Invoice</a></li>
                 </ul>
             </li>
         </ul>
