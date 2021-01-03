@@ -54,7 +54,7 @@ class DefaultController extends Controller
     public function getAllCustomerForInvoiceModal(){
         return response()->json([
             'flag' => 'OK',
-            'data' => Customer::select('id','name')->latest()->get()
+            'data' => Customer::select('id','name','phone')->latest()->get()
         ]);
     }
 

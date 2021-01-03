@@ -397,7 +397,7 @@
                    // console.log(response.data)
                     var html = '<option value="">Select a Customer</option>';
                     $.each(response.data,function (key,value) {
-                        html+= '<option value="'+value.id+'">'+value.name+'</option>';
+                        html+= '<option value="'+value.id+'">'+value.name+ " [" + value.phone +"]" +'</option>';
                     });
                     html+= '<option value="add_new_customer">Add New Customer</option>'
                     $('#customer_id').html(html);
@@ -413,7 +413,31 @@
             }
         });
     </script>
+    <script>
+        $('#addInvoiceForm').on('submit',function (e) {
+            e.preventDefault();
+            $.ajax({
+                url : <?= json_encode(route('invoice.store'))?>,
+                method : 'POST',
+                data : $('#addInvoiceForm').serialize(),
+                success : function (response) {
+                    console.log(response)
+                    if(response.flag == 'EMPTY'){
+                        setSwalAlert('error','Sorry!',response.message);
+                    }else if(response.flag == 'EMPTY_CUS'){
+                        setSwalAlert('info','Sorry!',response.message);
+                    }else if(response.flag == 'EMPTY_NAME'){
+                        setSwalAlert('info','Sorry!',response.message);
+                    }else if(response.flag == 'EMPTY_PAYMENT'){
+                        setSwalAlert('info','Sorry!',response.message);
+                    }else if(response.flag == 'EMPTY_PAYMENT_PARTIAL'){
+                        setSwalAlert('info','Sorry!',response.message);
+                    }
 
+                }
+            })
+        })
+    </script>
 
 @stop
 
@@ -472,7 +496,8 @@
                 </div>
                 <hr>
                 <div class="card">
-                    <form id="addInvoiceForm" method="post" action="{{route('invoice.store')}}">
+                    {{--//method="post" action="{{route('invoice.store')}}"--}}
+                    <form id="addInvoiceForm" >
                         @csrf
                         <table class="table table-bordered">
                             <thead>
@@ -497,7 +522,7 @@
                             </tr>
                             <tr>
                                 <th colspan="4" class="text-right"><span class="mt-3 d-block">Total</span></th>
-                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="subTotal" name="" readonly></td>
+                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="subTotal" name="subTotal" readonly></td>
                             </tr>
                             <tr>
                                 <td colspan="6">
@@ -517,13 +542,13 @@
                                             <option value="partial_paid">Partial Payment</option>
                                         </select>
                                         <div class="partial mt-2" style="display: none;">
-                                            <input type="text" class="form-control form-control form-control-sm" placeholder="Amount...">
+                                            <input type="text" class="form-control form-control form-control-sm" placeholder="Amount..." name="partial_amount">
                                         </div>
                                     </div>
                                 </td>
                                 <td colspan="3">
                                     <div class="form-group">
-                                        <label for="">Customer : </label>
+                                        <label for="" id="cusError">Customer : </label>
                                         <select name="customer_id" id="customer_id" class="form-control form-control-sm select2">
                                         </select>
                                     </div>
