@@ -20,4 +20,8 @@ class InvoiceController extends Controller
         }
         return view('backend.invoice.index',$this->data);
     }
+
+    public function store(Request $request){
+        return $request->all();
+    }
 }

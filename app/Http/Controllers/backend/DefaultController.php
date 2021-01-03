@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -47,6 +48,13 @@ class DefaultController extends Controller
         return response()->json([
             'status' => 200,
             'data' => Product::find($request->product_id)->quantity
+        ]);
+    }
+
+    public function getAllCustomerForInvoiceModal(){
+        return response()->json([
+            'flag' => 'OK',
+            'data' => Customer::select('id','name')->latest()->get()
         ]);
     }
 

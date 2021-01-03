@@ -92,7 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('invoice')->group(function () {
         Route::get('index', 'backend\InvoiceController@index')->name('invoice.index');
         Route::get('fetch', 'backend\PurchaseController@getAllPurchase')->name('invoice.fetch');
-        Route::post('store', 'backend\PurchaseController@store')->name('invoice.store');
+        Route::post('store', 'backend\InvoiceController@store')->name('invoice.store');
         Route::delete('delete', 'backend\PurchaseController@destroy')->name('invoice.destroy');
         Route::put('approve-invoice', 'backend\PurchaseController@approvePurchaseItem')->name('approve-invoice');
     });
@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
 
     #invoice
     Route::get('get-all-category-invoice','backend\DefaultController@getAllCategoryForInvoiceModal')->name('get.categories.invoice');
+    Route::get('get-all-customers-invoice','backend\DefaultController@getAllCustomerForInvoiceModal')->name('get.customers.invoice');
 
 });
 

@@ -42,7 +42,7 @@
                 method : 'GET',
                 data : {},
                 success : function (response) {
-                    console.log(response);
+                  //  console.log(response);
                     table_data_row(response);
                 }
             })
@@ -108,7 +108,7 @@
                     type : 'PUT',
                     data : {id : id},
                     success : function (response) {
-                        console.log(response);
+                       // console.log(response);
                         getAllPurchase();
                         swalWithBootstrapButtons.fire(
                             'Approved!',
@@ -289,6 +289,7 @@
                 var total = unit_price * qty;
                 $(this).closest('tr').find('input.selling_price').val(total);
                 calculateTotalAmount();
+                $('#discount').trigger('keyup');
             });
             $('body').on('keyup click','.unit_price',function () {
                 var unit_price = $(this).closest('tr').find('input.unit_price').val();
@@ -296,8 +297,12 @@
                 var total = unit_price * qty;
                 $(this).closest('tr').find('input.selling_price').val(total);
                 calculateTotalAmount();
+                $('#discount').trigger('keyup');
             });
 
+            $('body').on('keyup','#discount',function () {
+                calculateTotalAmount();
+            });
             function calculateTotalAmount() {
                 var sum = 0;
                 $('.selling_price').each(function () {
@@ -306,10 +311,24 @@
                         sum+= parseFloat(value);
                     }
                 });
+                var discount_amount = parseFloat($('#discount').val());
+                if(!isNaN(discount_amount) && discount_amount.length != 0){
+                    sum-=parseFloat(discount_amount);
+                }
                 $('#subTotal').val(sum);
+                var subTotalValueForAlert = $('#subTotal').val();
+                if(subTotalValueForAlert< 0){
+                    setNotifyAlert('Negative value not allowed!','error');
+                    $('#discount').addClass('border-danger');
+                }else{
+                    $('#discount').removeClass('border-danger');
+                }
             }
         });
-
+        $('body').on('click','.add_modal',function () {
+            $('#subTotal').val(0.0);
+            $('#discount').val(0.0);
+        })
         $('#addPurchaseForm').on('submit',function (e) {
             e.preventDefault();
             $.ajax({
@@ -337,6 +356,10 @@
             })
         });
 
+//if(<0){
+//    setNotifyAlert('success','Negative value not allowed');
+//}
+
     </script>
 
     <script id="document-template" type="text/x-handlebars-template">
@@ -353,8 +376,45 @@
             <td><input type="text" class="form-control selling_price" name="selling_price[]" value="0" readonly></td>
             <td><button class="btn btn-sm btn-danger remove_row"><i class="fa fa-minus-circle"></i></button></td>
         </tr>
-
     </script>
+
+    <script>
+        $('body').on('change','#payment_status',function () {
+            var value = $(this).val();
+            if(value == 'partial_paid'){
+                $('.partial').show();
+            }else{
+                $('.partial').hide();
+            }
+        });
+
+        $(function () {
+            $.ajax({
+                url : <?= json_encode(route('get.customers.invoice'))?>,
+                method : 'GET',
+                data : {},
+                success :function (response) {
+                   // console.log(response.data)
+                    var html = '<option value="">Select a Customer</option>';
+                    $.each(response.data,function (key,value) {
+                        html+= '<option value="'+value.id+'">'+value.name+'</option>';
+                    });
+                    html+= '<option value="add_new_customer">Add New Customer</option>'
+                    $('#customer_id').html(html);
+                }
+            })
+        });
+        $('body').on('change','#customer_id',function () {
+            var value = $(this).val();
+            if(value == 'add_new_customer'){
+                $('#addNewCustomerInvoice').show();
+            }else{
+                $('#addNewCustomerInvoice').hide();
+            }
+        });
+    </script>
+
+
 @stop
 
 
@@ -412,7 +472,8 @@
                 </div>
                 <hr>
                 <div class="card">
-                    <form id="addPurchaseForm">
+                    <form id="addInvoiceForm" method="post" action="{{route('invoice.store')}}">
+                        @csrf
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -436,7 +497,7 @@
                             </tr>
                             <tr>
                                 <th colspan="4" class="text-right"><span class="mt-3 d-block">Total</span></th>
-                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="subTotal" name="buying_price[]" readonly></td>
+                                <td colspan="1"><input type="text" class="form-control" value="0.0" id="subTotal" name="" readonly></td>
                             </tr>
                             <tr>
                                 <td colspan="6">
@@ -449,13 +510,13 @@
                                 <td colspan="3">
                                     <div class="form-group">
                                         <label for="">Payment : </label>
-                                        <select name="payment_status" id="" class="form-control form-control-sm">
+                                        <select name="payment_status" id="payment_status" class="form-control form-control-sm">
                                             <option value="">Select an Option</option>
-                                            <option value="">Full Paid</option>
-                                            <option value="">Full Due</option>
-                                            <option value="">Partial Payment</option>
+                                            <option value="full_paid">Full Paid</option>
+                                            <option value="full_due">Full Due</option>
+                                            <option value="partial_paid">Partial Payment</option>
                                         </select>
-                                        <div class="partial mt-2">
+                                        <div class="partial mt-2" style="display: none;">
                                             <input type="text" class="form-control form-control form-control-sm" placeholder="Amount...">
                                         </div>
                                     </div>
@@ -463,29 +524,25 @@
                                 <td colspan="3">
                                     <div class="form-group">
                                         <label for="">Customer : </label>
-                                        <select name="payment_status" id="" class="form-control form-control-sm">
-                                            <option value="">Select an Option</option>
-                                            <option value="">Full Paid</option>
-                                            <option value="">Full Due</option>
-                                            <option value="">Partial Payment</option>
+                                        <select name="customer_id" id="customer_id" class="form-control form-control-sm select2">
                                         </select>
                                     </div>
                                 </td>
                             </tr>
-                            <tr id="addNewCustomerInvoice">
+                            <tr id="addNewCustomerInvoice" style="display: none;">
                                 <td colspan="6">
                                     <div class="row">
                                         <div class="col-12 col-md-3">
                                             <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
                                         </div>
                                         <div class="col-12 col-md-3">
-                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                            <input type="email" class="form-control" id="cusEmail" name="cusEmail" placeholder="Customer Email">
                                         </div>
                                         <div class="col-12 col-md-3">
-                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                            <input type="text" class="form-control" id="cusPhone" name="cusPhone" placeholder="Customer Phone">
                                         </div>
                                         <div class="col-12 col-md-3">
-                                            <input type="text" class="form-control" id="cusName" name="cusName" placeholder="Customer Name">
+                                            <input type="text" class="form-control" id="cusAddress" name="cusAddress" placeholder="Customer Address">
                                         </div>
                                     </div>
                                 </td>
