@@ -432,6 +432,16 @@
                         setSwalAlert('info','Sorry!',response.message);
                     }else if(response.flag == 'EMPTY_PAYMENT_PARTIAL'){
                         setSwalAlert('info','Sorry!',response.message);
+                    }else if(response.flag == 'SUCCESS'){
+                        setSwalAlert('info','Success!',response.message);
+                        $('#addModal').modal('toggle');
+                       // getAllPurchase();
+                        window.location.href = "<?= json_encode(route('invoice.index'))?>";
+                        $('#category_id').val('');
+                        $('#product_id').val('');
+                        $('#addRow').html('');
+                        $('#subTotal').val(0.0);
+                        $('#discount').val(0.0);
                     }
 
                 }
