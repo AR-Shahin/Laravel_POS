@@ -89,12 +89,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     #Invoice Routes
-    Route::prefix('invoice')->group(function () {
-        Route::get('index', 'backend\InvoiceController@index')->name('invoice.index');
-        Route::get('fetch', 'backend\PurchaseController@getAllPurchase')->name('invoice.fetch');
-        Route::post('store', 'backend\InvoiceController@store')->name('invoice.store');
-        Route::delete('delete', 'backend\PurchaseController@destroy')->name('invoice.destroy');
-        Route::put('approve-invoice', 'backend\PurchaseController@approvePurchaseItem')->name('approve-invoice');
+    Route::prefix('invoice')->name('invoice.')->namespace('backend')->group(function () {
+        Route::get('index', 'InvoiceController@index')->name('index');
+        Route::get('fetch', 'InvoiceController@getAllInvoice')->name('fetch');
+        Route::post('store', 'InvoiceController@store')->name('store');
+        Route::post('approve','InvoiceController@approve')->name('approve');
+        Route::get('view','InvoiceController@view')->name('view');
+        Route::delete('delete', 'PurchaseController@destroy')->name('destroy');
+
     });
 
 
@@ -109,6 +111,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get-all-customers-invoice','backend\DefaultController@getAllCustomerForInvoiceModal')->name('get.customers.invoice');
 
 });
+
+#password
+//$2y$10$HhVnGWE/wVjrLsD2fxXHKuQ/5EH9vR8fa2Exu/p2FCheEyQ52jPwW
 
 
 

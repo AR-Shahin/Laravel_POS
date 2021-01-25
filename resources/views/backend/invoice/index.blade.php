@@ -16,12 +16,12 @@
                             <thead>
                             <tr>
                                 <th width="1%">SL</th>
-                                <th>P. No</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Quantity</th>
-                                <th>Supplier</th>
+                                <th>Customer Name</th>
+                                <th>I. No</th>
+                                <th>Date</th>
                                 <th>Status</th>
+                                {{--<th>Supplier</th>--}}
+                                {{--<th>Status</th>--}}
                                 <th class="">Actions</th>
                             </tr>
 
@@ -35,31 +35,28 @@
         </div>
     </div>
     <script>
-        getAllPurchase();
-        function getAllPurchase() {
+        getAllInvoice();
+        function getAllInvoice() {
             $.ajax({
-                url : <?= json_encode(route('purchase.fetch'))?>,
+                url : <?= json_encode(route('invoice.fetch'))?>,
                 method : 'GET',
                 data : {},
                 success : function (response) {
-                  //  console.log(response);
-                    table_data_row(response);
+                    // console.log(response.data);
+                    table_data_row(response.data);
                 }
             })
         }
-        //console.log(getAllPurchase());
         function table_data_row(data) {
             var rows = '';
             var i = 0;
             $.each(data,function (key,value) {
-                console.log(value);
+                // console.log(value.customer.name);
                 rows+= '<tr>';
                 rows+= '<td>'+ ++i +'</td>';
-                rows+= '<td>'+ value.purchase_no +'</td>';
-                rows+= '<td>'+ value.product.name +'</td>';
-                rows+= '<td>'+ value.category.name +'</td>';
-                rows+= '<td class="text-center">'+ value.buying_quantity +'</td>';
-                rows+= '<td>'+ value.supplier.name +'</td>';
+                rows+= '<td>'+ value.customer.name +'</td>';
+                rows+= '<td>'+ value.invoice_no +'</td>';
+                rows+= '<td>'+ value.date +'</td>';
                 rows+= '<td class="text-center">';
                 if(value.status == 0){
                     rows+= ' <button class="badge badge-danger" data-id="'+value.id+'" id="makeActive">Pending</button>';
@@ -71,70 +68,37 @@
                 if(value.status == 0) {
                     rows += '<a class="btn btn-sm btn-success text-light" id="approvePurchase" data-id="' + value.id + '">Approve</a> ';
                     rows += '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="' + value.id + '" >Delete</a> ';
+                    rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.id + '" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i> View</a> ';
                 }else{
-                    rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.purchase_no + '" ><i class="fa fa-eye"></i> View</a> ';
+                    rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.id + '" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i> View</a> ';
                 }
 
                 rows += '</td>';
                 rows+= '</tr>';
 
             });
-            $('#purchaseBody').html(rows);
+            $('#invoiceBody').html(rows);
             $('#purchaseTable').dataTable();
         }
 
+        //approve purchase
         $('body').on('click','#approvePurchase',function (e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success mx-2',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            })
-            swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Approve it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                $.ajax({
-                    url : <?= json_encode(route('approve-purchase'))?>,
-                    type : 'PUT',
-                    data : {id : id},
-                    success : function (response) {
-                       // console.log(response);
-                        getAllPurchase();
-                        swalWithBootstrapButtons.fire(
-                            'Approved!',
-                            'Your Purchase has been Approved.',
-                            'success'
-                        )
-                    },
-                    error : function (e) {
-                        console.log(e);
+            $.ajax({
+                url : "{{route('invoice.approve')}}",
+                method : 'POST',
+                data: {id : id},
+                success : function (response) {
+                    if(response.flag == 'UPDATE'){
+                        setNotifyAlert(response.message,'success');
+                        getAllInvoice();
                     }
-                })
+                }
 
-            } else if (
-                    /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'okk :)',
-                    'error'
-                )
-            }
+            })
         })
-        });
-
-        //Delete Unit
+        //Delete
         $('body').on('click','#deleteRow',function (e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
@@ -167,9 +131,6 @@
                             response.message,
                             'success'
                         )
-                    },
-                    error : function (e) {
-                        console.log(e);
                     }
                 })
 
@@ -185,6 +146,34 @@
             }
         })
         })
+
+        //view
+        $('body').on('click','#viewRow',function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url : "{{route('invoice.view')}}",
+                method : 'GET',
+                data: {id : id},
+                success : function (response) {
+                    // console.log(response.data.items);
+
+                    $('#viewSinglePurchase').html(viewSinglePurchaseData(response.data));
+                }
+
+            })
+        });
+
+        function viewSinglePurchaseData(data) {
+            return   `    <table class="table table-bordered">
+                        <tr>
+                        <td>Date : </td>
+                        <td>${data.self.date}</td>
+</tr>
+
+
+                    </table>`
+        }
     </script>
 
     <script>
@@ -356,9 +345,9 @@
             })
         });
 
-//if(<0){
-//    setNotifyAlert('success','Negative value not allowed');
-//}
+        //if(<0){
+        //    setNotifyAlert('success','Negative value not allowed');
+        //}
 
     </script>
 
@@ -394,7 +383,7 @@
                 method : 'GET',
                 data : {},
                 success :function (response) {
-                   // console.log(response.data)
+                    // console.log(response.data)
                     var html = '<option value="">Select a Customer</option>';
                     $.each(response.data,function (key,value) {
                         html+= '<option value="'+value.id+'">'+value.name+ " [" + value.phone +"]" +'</option>';
@@ -435,8 +424,8 @@
                     }else if(response.flag == 'SUCCESS'){
                         setSwalAlert('info','Success!',response.message);
                         $('#addModal').modal('toggle');
-                       // getAllPurchase();
-                        window.location.href = "<?= json_encode(route('invoice.index'))?>";
+                        getAllInvoice();
+                        // window.location.href = "<?= json_encode(route('invoice.index'))?>";
                         $('#category_id').val('');
                         $('#product_id').val('');
                         $('#addRow').html('');
@@ -590,6 +579,30 @@
                         </table>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{--view modal--}}
+
+<!-- Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View Purchase</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="viewSinglePurchase">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ use App\Models\Invoice_Details;
 use App\Models\Payment;
 use App\Models\PaymentDetails;
 use function count;
+use function dd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,11 +26,12 @@ class InvoiceController extends Controller
             $invoiceData = Invoice::latest()->first()->invoice_no;
             $this->data['invoice_no'] = $invoiceData + 1;
         }
+        // return $this->data['invoice_no'];
         return view('backend.invoice.index',$this->data);
     }
 
     public function store(Request $request){
-        // return $request->all();
+        // dd( $request->all());
         if($request->has('category_id')){
             if($request->input('payment_status') == null){
                 return response()->json([
@@ -62,20 +64,33 @@ class InvoiceController extends Controller
                     'message' => 'Sorry! Please Enter Customer Details!'
                 ]);
             }
+            if($request->input('customer_id') == 'add_new_customer'){
+                $customer = new Customer();
+                $customer->name = $request->input('cusName');
+                $customer->email = $request->input('cusEmail');
+                $customer->phone = $request->input('cusPhone');
+                $customer->address = $request->input('cusAddress');
+                $customer->save();
+                $customerId = $customer->id;
+            }else{
+                $customerId = $request->input('customer_id');
+            }
             $invoice = new Invoice();
             $invoice->invoice_no = $request->input('invoice_no');
+            $invoice->customer_id = $customerId;
             $invoice->date = $request->input('date');
             $invoice->description = $request->input('description');
             $invoice->created_by = Auth::user()->id;
             $invoice->updated_by = Auth::user()->id;
 
-            DB::transaction(function () use ($request,$invoice){
+            DB::transaction(function () use ($request,$invoice,$customerId){
                 if($invoice->save()){
                     $countRows = count($request->input('category_id'));
+                    // dd($countRows);
                     for ($i = 0;$i<$countRows;$i++){
                         $invoice_details = new Invoice_Details();
                         $invoice_details->date = $request->input('date');
-                        $invoice_details->invoice_id = $request->input('invoice_no');
+                        $invoice_details->invoice_id = $invoice->id;
                         $invoice_details->category_id = $request->category_id[$i];
                         $invoice_details->product_id = $request->product_id[$i];
                         $invoice_details->selling_qty = $request->selling_qty[$i];
@@ -83,17 +98,19 @@ class InvoiceController extends Controller
                         $invoice_details->selling_price = $request->selling_price[$i];
                         $invoice_details->save();
                     }
-                    if($request->input('customer_id') == 'add_new_customer'){
-                        $customer = new Customer();
-                        $customer->name = $request->input('cusName');
-                        $customer->email = $request->input('cusEmail');
-                        $customer->phone = $request->input('cusPhone');
-                        $customer->address = $request->input('cusAddress');
-                        $customer->save();
-                        $customerId = $customer->id;
-                    }else{
-                        $customerId = $request->input('customer_id');
-                    }
+                    //changing portion
+//                    if($request->input('customer_id') == 'add_new_customer'){
+//                        $customer = new Customer();
+//                        $customer->name = $request->input('cusName');
+//                        $customer->email = $request->input('cusEmail');
+//                        $customer->phone = $request->input('cusPhone');
+//                        $customer->address = $request->input('cusAddress');
+//                        $customer->save();
+//                        $customerId = $customer->id;
+//                    }else{
+//                        $customerId = $request->input('customer_id');
+//                    }
+
                     $payment = new Payment();
                     $payment_details = new PaymentDetails();
 
@@ -138,4 +155,32 @@ class InvoiceController extends Controller
         }
 
     }
+
+    public function getAllInvoice(){
+        return response([
+            'data' => Invoice::with(['payment','customer'])
+                -> latest()->get()
+        ]);
+    }
+
+    public function approve(Request $request){
+        $update = Invoice::find($request->id)->update([
+            'status' => 1
+        ]);
+        if($update){
+            return $this->returnAjaxResponse('UPDATE','Approve Invoice!');
+        }
+    }
+
+    public function view(Request $request){
+      //  return DB::select("SELECT invoice__details.*,payments.*,payment_details.*,invoices.* FROM invoice__details INNER JOIN invoices ON invoice__details.invoice_id = invoices.id INNER JOIN payments ON payments.invoice_id = invoices.id INNER JOIN payment_details ON payment_details.invoice_id = invoices.id WHERE invoices.id = $request->id ");
+        $data =[
+            'self' => Invoice::find($request->id),
+            'items' => Invoice_Details::where('invoice_id',$request->id)->get(),
+            'payment' => Payment::where('invoice_id',$request->id)->first(),
+            'payment_details' => PaymentDetails::where('invoice_id',$request->id)->first(),
+        ];
+        return $this->returnAjaxResponse('success','',$data);
+    }
+
 }

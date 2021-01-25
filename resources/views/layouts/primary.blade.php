@@ -6,7 +6,6 @@
     <meta name="description" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="img/favicon.html">
 
     <title>@yield('title',' Admin') | Admin</title>
 
