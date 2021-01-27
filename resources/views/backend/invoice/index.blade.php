@@ -165,14 +165,30 @@
         });
 
         function viewSinglePurchaseData(data) {
-            return   `    <table class="table table-bordered">
-                        <tr>
-                        <td>Date : </td>
-                        <td>${data.self.date}</td>
-</tr>
 
+            var html = '';
+            html += '<table class="table table-bordered">';
+            html += '<tr><td>Date : </td>';
+            html += '<td>' + data.self.date +'</td>';
+            html += '<th colspan="2">Status : </th>';
+            html += '<td>';
+            if(data.self.status == 1){
+                html += 'Approved';
+            }else{
+                html += 'Pending';
+            }
+            html += '</td>';
+            html += '</tr>';
+            html += '<tr><td colspan="5"><h5 class="text-center">Invoice Items</h5></td></tr>';
+            html += '<tr><th>Sl</th> <th>Name</th> <th>Quantity</th> <th>Price</th> <th>Total</th></tr>';
+var sum = 0;
+            $.each(data.items, function (key,value) {
+                sum+= value.selling_price;
+                html += '<tr><td>'+ ++key +'</td><td>'+ value.product.name+'</td><td>'+value.selling_qty+'</td> <td>'+value.unit_price+'</td><td>'+value.selling_price+'</td></tr>';
+            });
 
-                    </table>`
+            html += '<tr><td colspan="4" class="text-right">Total</td><td>'+sum+'</td></tr>';
+            return html;
         }
     </script>
 
@@ -589,7 +605,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">View Purchase</h5>

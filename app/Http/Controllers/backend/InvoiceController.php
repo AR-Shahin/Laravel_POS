@@ -176,7 +176,7 @@ class InvoiceController extends Controller
       //  return DB::select("SELECT invoice__details.*,payments.*,payment_details.*,invoices.* FROM invoice__details INNER JOIN invoices ON invoice__details.invoice_id = invoices.id INNER JOIN payments ON payments.invoice_id = invoices.id INNER JOIN payment_details ON payment_details.invoice_id = invoices.id WHERE invoices.id = $request->id ");
         $data =[
             'self' => Invoice::find($request->id),
-            'items' => Invoice_Details::where('invoice_id',$request->id)->get(),
+            'items' => Invoice_Details::with('product')->where('invoice_id',$request->id)->get(),
             'payment' => Payment::where('invoice_id',$request->id)->first(),
             'payment_details' => PaymentDetails::where('invoice_id',$request->id)->first(),
         ];
