@@ -183,4 +183,15 @@ class InvoiceController extends Controller
         return $this->returnAjaxResponse('success','',$data);
     }
 
+    public function destroy(Request $request){
+        $id =  $request->input('id');
+        Invoice::find($id)->delete();
+        Invoice_Details::where('invoice_id',$id)->delete();
+        PaymentDetails::where('invoice_id',$id)->delete();
+        Payment::where('invoice_id',$id)->delete();
+
+        return $this->returnAjaxResponse('DELETE','Data Delete Successfully!',[],200);
+
+    }
+
 }

@@ -72,10 +72,8 @@
                 }else{
                     rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.id + '" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i> View</a> ';
                 }
-
                 rows += '</td>';
                 rows+= '</tr>';
-
             });
             $('#invoiceBody').html(rows);
             $('#purchaseTable').dataTable();
@@ -121,11 +119,12 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                 $.ajax({
-                    url : <?= json_encode(route('purchase.destroy'))?>,
+                    url :"{{route('invoice.destroy')}}" ,
                     type : 'DELETE',
                     data : {id : id},
                     success : function (response) {
-                        getAllPurchase();
+                        getAllInvoice();
+                      //  console.log(response);
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             response.message,
@@ -188,6 +187,10 @@ var sum = 0;
             });
 
             html += '<tr><td colspan="4" class="text-right">Total</td><td>'+sum+'</td></tr>';
+            //payment
+            html += '<tr><td colspan="5"><h5 class="text-center">Payment Details</h5></td></tr>';
+            html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';
+            html += '<tr>'+ data.payment.paid_status+' <th></th><th>'+data.payment.total_amount+'</th> <th>'+data.payment.discount_amount+'</th> <th>'+data.payment.paid_amount+'</th> <th>'+data.payment.due_amount+'</th></tr>';
             return html;
         }
     </script>
