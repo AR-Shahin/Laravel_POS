@@ -190,7 +190,7 @@ var sum = 0;
             //payment
             html += '<tr><td colspan="5"><h5 class="text-center">Payment Details</h5></td></tr>';
             html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';
-            html += '<tr>'+ data.payment.paid_status+' <th></th><th>'+data.payment.total_amount+'</th> <th>'+data.payment.discount_amount+'</th> <th>'+data.payment.paid_amount+'</th> <th>'+data.payment.due_amount+'</th></tr>';
+            html += '<tr><th>'+ data.payment.paid_status+'</th><th>'+data.payment.total_amount+'</th> <th>'+data.payment.discount_amount+'</th> <th>'+data.payment.paid_amount+'</th> <th>'+data.payment.due_amount+'</th></tr>';
             return html;
         }
     </script>
@@ -236,7 +236,9 @@ var sum = 0;
                 type : 'GET',
                 data : {product_id : product_id},
                 success:function (response) {
+                   // console.log(response);
                     $('#product_available').val(response.data);
+                    $('#product_avg_price').val(response.price);
                 }
             })
         })
@@ -492,7 +494,7 @@ var sum = 0;
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
                         <div class="form-group">
                             <label for="" class="product_id_error">Product : </label>
                             <select name="product_id" id="product_id" class="form-control select2 form-control-sm">
@@ -500,10 +502,11 @@ var sum = 0;
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-1">
-                        <div class="form-group">
-                            <label for="">Available : </label>
+                    <div class="col-12 col-md-2">
+                        <label for="">Available and Price: </label>
+                        <div class="input-group">
                             <input type="text" class="form-control form-control-sm"  id="product_available" value="" readonly="">
+                            <input type="text" class="form-control form-control-sm"  id="product_avg_price" value="" readonly="">
                         </div>
                     </div>
                     <div class="col-12 col-md-1">

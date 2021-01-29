@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use function response;
@@ -47,7 +48,8 @@ class DefaultController extends Controller
     public function getProductQuantity(Request $request){
         return response()->json([
             'status' => 200,
-            'data' => Product::find($request->product_id)->quantity
+            'data' => Product::find($request->product_id)->quantity,
+            'price' => Purchase::where('product_id',$request->product_id)->avg('unit_price')
         ]);
     }
 
