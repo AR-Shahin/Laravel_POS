@@ -9,6 +9,7 @@ use App\Models\Invoice_Details;
 use App\Models\Payment;
 use App\Models\PaymentDetails;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade as PDF;
 use function count;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -164,10 +165,10 @@ class InvoiceController extends Controller
     }
 
     public function approve(Request $request){
-       $products =  Invoice_Details::select('product_id','selling_qty')->where('invoice_id',$request->id)->get();
-       foreach ($products as  $product){
-           Product::where('id',$product->product_id)->decrement('quantity', $product->selling_qty);
-       }
+        $products =  Invoice_Details::select('product_id','selling_qty')->where('invoice_id',$request->id)->get();
+        foreach ($products as  $product){
+            Product::where('id',$product->product_id)->decrement('quantity', $product->selling_qty);
+        }
         $update = Invoice::find($request->id)->update([
             'status' => 1
         ]);
@@ -177,7 +178,7 @@ class InvoiceController extends Controller
     }
 
     public function view(Request $request){
-      //  return DB::select("SELECT invoice__details.*,payments.*,payment_details.*,invoices.* FROM invoice__details INNER JOIN invoices ON invoice__details.invoice_id = invoices.id INNER JOIN payments ON payments.invoice_id = invoices.id INNER JOIN payment_details ON payment_details.invoice_id = invoices.id WHERE invoices.id = $request->id ");
+        //  return DB::select("SELECT invoice__details.*,payments.*,payment_details.*,invoices.* FROM invoice__details INNER JOIN invoices ON invoice__details.invoice_id = invoices.id INNER JOIN payments ON payments.invoice_id = invoices.id INNER JOIN payment_details ON payment_details.invoice_id = invoices.id WHERE invoices.id = $request->id ");
         $data =[
             'self' => Invoice::find($request->id),
             'items' => Invoice_Details::with('product')->where('invoice_id',$request->id)->get(),
@@ -196,6 +197,17 @@ class InvoiceController extends Controller
 
         return $this->returnAjaxResponse('DELETE','Data Delete Successfully!',[],200);
 
+    }
+
+    public function printInvoice(Request $request){
+        $this->data['items'] = Invoice_Details::with('product')->where('invoice_id',$request->id)->get();
+        $this->data['invoice'] = Invoice::with('customer')->find($request->id);
+        $this->data['payment'] = Payment::where('invoice_id',$request->id)->first();
+        $customPaper = array(0,0,720,1000);
+        PDF::setOptions(['dpi' => 200, 'defaultFont' => 'arial']);
+        $pdf = PDF::loadView('pdf.invoice',$this->data);
+        return $pdf->stream("invoice-$request->id.pdf");
+       // return view('pdf.invoice');
     }
 
 }

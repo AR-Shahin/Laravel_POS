@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('approve','InvoiceController@approve')->name('approve');
         Route::get('view','InvoiceController@view')->name('view');
         Route::delete('delete', 'InvoiceController@destroy')->name('destroy');
+        Route::get('print/{id?}', 'InvoiceController@printInvoice')->name('print');
 
     });
 

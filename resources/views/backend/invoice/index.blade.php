@@ -59,9 +59,9 @@
                 rows+= '<td>'+ value.date +'</td>';
                 rows+= '<td class="text-center">';
                 if(value.status == 0){
-                    rows+= ' <button class="badge badge-danger" data-id="'+value.id+'" id="makeActive">Pending</button>';
+                    rows+= ' <span class="badge badge-danger" data-id="'+value.id+'" id="makeActive">Pending</span>';
                 }else{
-                    rows+= ' <button class="badge badge-success" data-id="'+value.id+'" id="makeInactive">Approved</button>';
+                    rows+= ' <span class="badge badge-success" data-id="'+value.id+'" id="makeInactive">Approved</span>';
                 }
                 rows += '</td>'
                 rows += '<td class="text-center">';
@@ -69,8 +69,10 @@
                     rows += '<a class="btn btn-sm btn-success text-light" id="approvePurchase" data-id="' + value.id + '">Approve</a> ';
                     rows += '<a class="btn btn-sm btn-danger text-light"  id="deleteRow" data-id="' + value.id + '" >Delete</a> ';
                     rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.id + '" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i> View</a> ';
+                    rows += '<a class="btn btn-sm btn-secondary text-light"  id="printRow" data-id="' + value.id + '"><i class="fa fa-print"></i> Print</a> ';
                 }else{
                     rows += '<a class="btn btn-sm btn-primary text-light"  id="viewRow" data-id="' + value.id + '" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i> View</a> ';
+                    rows += '<a class="btn btn-sm btn-secondary text-light"  id="printRow" data-id="' + value.id + '" ><i class="fa fa-print"></i> Print</a> ';
                 }
                 rows += '</td>';
                 rows+= '</tr>';
@@ -456,6 +458,14 @@ var sum = 0;
 
                 }
             })
+        });
+
+        //print
+
+        $('body').on('click','#printRow',function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            window.location.href = "{{route('invoice.print')}}/" + id;
         })
     </script>
 
