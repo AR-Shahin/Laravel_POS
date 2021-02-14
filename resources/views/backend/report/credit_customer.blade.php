@@ -80,7 +80,7 @@
             data : {id : id},
             success : function (response) {
               //  alert(55);
-                 console.log(response.data.credit_payment);
+                // console.log(response.data.payment_details);
                 // $('#cusName').innerText(response.self.customer.name);
                 $('#viewSingleCredit').html(viewSinglePurchaseData(response.data));
             }
@@ -118,8 +118,8 @@
 
         //payment
         html += '<tr><td colspan="5"><h5 class="text-center">Payment Details</h5></td></tr>';
-        $.each(data.credit_payment, function (key,value) {
-            html += '<tr><td colspan="3" class="text-right">Date </td> <td>'+ value.created_at+'</td> <td>'+ value.paid_amount+'</td></tr>';
+        $.each(data.PD, function (key,value) {
+            html += '<tr><td colspan="3" class="text-right">Date </td> <td>'+ value.created_at+'</td> <td>'+ value.current_paid_amount+'</td></tr>';
         });
 
 //        html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';

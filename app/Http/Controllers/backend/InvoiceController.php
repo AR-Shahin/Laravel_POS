@@ -185,6 +185,7 @@ class InvoiceController extends Controller
             'payment' => Payment::where('invoice_id',$request->id)->first(),
             'credit_payment' => Payment::where('invoice_id',$request->id)->get(),
             'payment_details' => PaymentDetails::where('invoice_id',$request->id)->first(),
+            'PD' => PaymentDetails::where('invoice_id',$request->id)->get(),
         ];
         return $this->returnAjaxResponse('success','',$data);
     }
