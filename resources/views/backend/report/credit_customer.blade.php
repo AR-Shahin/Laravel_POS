@@ -79,7 +79,8 @@
             dataType : 'JSON',
             data : {id : id},
             success : function (response) {
-                // console.log(response.self.customer.name);
+              //  alert(55);
+                 console.log(response.data.credit_payment);
                 // $('#cusName').innerText(response.self.customer.name);
                 $('#viewSingleCredit').html(viewSinglePurchaseData(response.data));
             }
@@ -107,12 +108,24 @@
             sum+= value.selling_price;
             html += '<tr><td>'+ ++key +'</td><td>'+ value.product.name+'</td><td>'+value.selling_qty+'</td> <td>'+value.unit_price+'</td><td>'+value.selling_price+'</td></tr>';
         });
-
+        var discount = data.payment.discount_amount;
+//console.log(discount);
+//console.log(typeof discount);
+        sum = sum - discount;
+        html += '<tr><td colspan="4" class="text-right">Discount</td><td> - '+discount+'</td></tr>';
         html += '<tr><td colspan="4" class="text-right">Total</td><td>'+sum+'</td></tr>';
+        html += '<tr><td colspan="4" class="text-right">Due</td><td><span id="dueAmount">'+data.payment.due_amount+'</span></td></tr>';
+
         //payment
         html += '<tr><td colspan="5"><h5 class="text-center">Payment Details</h5></td></tr>';
-        html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';
-        html += '<tr><th>'+ data.payment.paid_status+'</th><th>'+data.payment.total_amount+'</th> <th>'+data.payment.discount_amount+'</th> <th>'+data.payment.paid_amount+'</th> <th>'+data.payment.due_amount+'</th></tr>';
+        $.each(data.credit_payment, function (key,value) {
+            html += '<tr><td colspan="3" class="text-right">Date </td> <td>'+ value.created_at+'</td> <td>'+ value.paid_amount+'</td></tr>';
+        });
+
+//        html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';
+//        html += '<tr><th>'+ data.payment.paid_status+'</th><th>'+data.payment.total_amount+'</th> <th>'+data.payment.discount_amount+'</th> <th>'+data.payment.paid_amount+'</th> <th>'+data.payment.due_amount+'</th></tr>';
+
+
 
         //new payment
         var row = '';
@@ -125,11 +138,18 @@
         row += ' <option value="partial_paid">Partial Payment</option>';
         row += '</select>';
         row += '<div class="partial mt-2" style="display: none;">';
-        row += '<input type="text" class="form-control form-control-sm" placeholder="Amount ..." name="partial_amount"></div>';
+        row += '<input type="text" class="form-control form-control-sm" placeholder="Amount ..." name="partial_amount" id="partial_amount"></div>';
+
+        row += '<input type="hidden" name="customer_id" id="customer_id" value="'+ data.self.customer_id+'">';
+        row += '<input type="hidden" name="invoice_id" id="invoice_id" value="'+ data.payment.invoice_id+'">';
+        row += '<input type="hidden" name="due_amount" id="due_amount" value="'+ data.payment.due_amount+'">';
+        row += '<input type="hidden" name="payment_id" id="payment_id" value="'+ data.payment.id+'">';
+
         row += '<button class="btn btn-sm btn-success btn-block mt-2"> Pay</button>';
         row +=  '</div></div></div>';
 
         $('#newPayment').html(row);
+
         return html;
     }
     $('body').on('change','#payment_status',function () {
@@ -140,6 +160,44 @@
             $('.partial').hide();
         }
     });
+
+    $('body').on('keyup','#partial_amount',function () {
+        var dueAmount = $('#dueAmount').text();
+       // console.log(dueAmount);
+        if(Number(dueAmount) <  $(this).val()){
+            setNotifyAlert('Value Overloaded!!','error');
+            $('#partial_amount').addClass('border-danger');
+        }else{
+            $('#partial_amount').removeClass('border-danger');
+        }
+    });
+
+    //submit form
+    $('body').on('submit','#creditCustomerForm',function (e) {
+        e.preventDefault();
+        if($('#payment_status').val() === ''){
+            setNotifyAlert('Select Payment Type!');
+            return;
+        }
+        var ifHasAmount =  $('#partial_amount').val();
+        if($('#payment_status').val() === 'partial_paid' && ifHasAmount == ''){
+            setSwalAlert('error','','Enter Number of Amount!');
+            return;
+        }
+        if(isNaN(ifHasAmount)){
+            setSwalAlert('warning','','Enter Valid Amount!');
+            return;
+        }
+        $.ajax({
+            url : "{{route('report.update.invoice')}}",
+            method : 'POST',
+            data : $(this).serialize(),
+            success : function (response) {
+                console.log(response)
+            }
+        })
+    })
+
 
 </script>
 @endpush

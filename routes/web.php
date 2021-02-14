@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
     Route::namespace('Report')->group(function (){
         Route::get('credit/customer','CreditCustomerController@index')->name('credit.customer');
         Route::get('get-credit/customer','CreditCustomerController@getAllCreditCustomers')->name('get-credit.customer');
+        Route::post('update/invoice','CreditCustomerController@updateInvoiceAmount')->name('update.invoice');
     });
     });
 

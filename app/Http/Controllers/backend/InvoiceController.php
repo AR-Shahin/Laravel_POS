@@ -183,6 +183,7 @@ class InvoiceController extends Controller
             'self' => Invoice::with('customer')->find($request->id),
             'items' => Invoice_Details::with('product')->where('invoice_id',$request->id)->get(),
             'payment' => Payment::where('invoice_id',$request->id)->first(),
+            'credit_payment' => Payment::where('invoice_id',$request->id)->get(),
             'payment_details' => PaymentDetails::where('invoice_id',$request->id)->first(),
         ];
         return $this->returnAjaxResponse('success','',$data);
