@@ -55,7 +55,7 @@
 <script src="{{asset('backend')}}/js/common-scripts.js"></script>
 <script src="{{asset('backend')}}/ajax.js"></script>
 
-
+@stack('script')
 
 </body>
 </html>

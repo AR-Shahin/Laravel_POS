@@ -61,6 +61,17 @@
                     <li><a href="{{route('invoice.index')}}">Manage Invoice</a></li>
                 </ul>
             </li>
+            {{--Report--}}
+            <li class="sub-menu">
+                <a href="javascript:;" >
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span>Reports</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{{route('report.credit.customer')}}">Credit Customers</a></li>
+                </ul>
+            </li>
+
         </ul>
         <!-- sidebar menu end-->
     </div>

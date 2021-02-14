@@ -100,6 +100,14 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
+#Report Controller
+    Route::prefix('report')->name('report.')->namespace('backend')->group(function () {
+        #credit
+    Route::namespace('Report')->group(function (){
+        Route::get('credit/customer','CreditCustomerController@index')->name('credit.customer');
+        Route::get('get-credit/customer','CreditCustomerController@getAllCreditCustomers')->name('get-credit.customer');
+    });
+    });
 
     #Default Routes
     Route::get('get-all-suppliers','backend\DefaultController@getAllSuppliers')->name('get.suppliers');

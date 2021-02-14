@@ -55,7 +55,7 @@
                 rows+= '<tr>';
                 rows+= '<td>'+ ++i +'</td>';
                 rows+= '<td>'+ value.customer.name +'</td>';
-                rows+= '<td>'+ value.invoice_no +'</td>';
+                rows+= '<td><b>Invoice No #</b>'+ value.id +'</td>';
                 rows+= '<td>'+ value.date +'</td>';
                 rows+= '<td class="text-center">';
                 if(value.status == 0){
@@ -164,7 +164,6 @@
 
             })
         });
-
         function viewSinglePurchaseData(data) {
 
             var html = '';
@@ -215,6 +214,7 @@ var sum = 0;
         });
 
         $('body').on('change','#category_id',function () {
+
             var category_id = $(this).val();
             $.ajax({
                 url : <?= json_encode(route('get.purchase.products'))?>,
@@ -294,6 +294,7 @@ var sum = 0;
                 $(this).closest('.delete_add_more_item').remove();
                 calculateTotalAmount();
             });
+
 
             $('body').on('keyup click','.selling_qty',function () {
                 var unit_price = $(this).closest('tr').find('input.unit_price').val();
