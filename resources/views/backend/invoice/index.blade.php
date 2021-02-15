@@ -186,8 +186,11 @@ var sum = 0;
                 sum+= value.selling_price;
                 html += '<tr><td>'+ ++key +'</td><td>'+ value.product.name+'</td><td>'+value.selling_qty+'</td> <td>'+value.unit_price+'</td><td>'+value.selling_price+'</td></tr>';
             });
-
-            html += '<tr><td colspan="4" class="text-right">Total</td><td>'+sum+'</td></tr>';
+var discount = data.payment.discount_amount;
+            html += '<tr><td colspan="4" class="text-right">Sub Total</td><td>'+sum+'</td></tr>';
+            html += '<tr><td colspan="4" class="text-right">Discount</td><td>'+discount+'</td></tr>';
+            sum = sum - discount;
+            html += '<tr><td colspan="4" class="text-right">Total</td><td>'+sum +'</td></tr>';
             //payment
             html += '<tr><td colspan="5"><h5 class="text-center">Payment Details</h5></td></tr>';
             html += '<tr> <th>Status</th><th>Total</th> <th>Discount</th> <th>Paid</th> <th>Due</th></tr>';

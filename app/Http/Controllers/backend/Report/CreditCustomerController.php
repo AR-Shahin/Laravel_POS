@@ -28,7 +28,7 @@ class CreditCustomerController extends Controller
         $pd = new PaymentDetails();
         $payment->invoice_id = $request->invoice_id;
         $payment->customer_id = $request->customer_id;
-        $payment->discount_amount    = 0;
+//        $payment->discount_amount    = 0;
         $payment->paid_status  = $request->payment_status;
         if($request->payment_status == 'full_paid'){
             $payment->paid_amount   = Payment::where('invoice_id',$request->invoice_id)->first()->paid_amount + $request->due_amount;

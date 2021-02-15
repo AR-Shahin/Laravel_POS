@@ -193,7 +193,9 @@
             method : 'POST',
             data : $(this).serialize(),
             success : function (response) {
-                console.log(response)
+                $('#payModal').modal('toggle');
+                setSwalAlert('success','Success!','Payment Received!!!');
+                getAllCreditCustomers();
             }
         })
     })
