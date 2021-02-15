@@ -145,11 +145,10 @@
         row += '<input type="hidden" name="due_amount" id="due_amount" value="'+ data.payment.due_amount+'">';
         row += '<input type="hidden" name="payment_id" id="payment_id" value="'+ data.payment.id+'">';
 
-        row += '<button class="btn btn-sm btn-success btn-block mt-2"> Pay</button>';
+        row += '<button class="btn btn-sm btn-success btn-block mt-2"> Pay</button></form>';
         row +=  '</div></div></div>';
-
+        row += '<buttaon class="btn btn-sm btn-secondary"  id="printBtn" data-id="'+data.self.id+'"><i class="fa fa-print"></i> Print</buttaon>';
         $('#newPayment').html(row);
-
         return html;
     }
     $('body').on('change','#payment_status',function () {
@@ -199,6 +198,13 @@
             }
         })
     })
+
+    //print creditCustomer
+    $('body').on('click','#printBtn',function () {
+        alert($(this).data('id'))
+
+    })
+
 
 
 </script>

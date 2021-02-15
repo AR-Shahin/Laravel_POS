@@ -79,7 +79,7 @@ class InvoiceController extends Controller
             $invoice = new Invoice();
             $invoice->invoice_no = $request->input('invoice_no');
             $invoice->customer_id = $customerId;
-            $invoice->date = $request->input('date');
+            $invoice->date = $request->input('start_date',date('Y-m-d'));
             $invoice->description = $request->input('description');
             $invoice->created_by = Auth::user()->id;
             $invoice->updated_by = Auth::user()->id;
