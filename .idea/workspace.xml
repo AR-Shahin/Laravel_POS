@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95ec105b-450f-4071-bcea-fcce4873d912" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/backend/InvoiceController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/backend/InvoiceController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Invoice.php" afterPath="$PROJECT_DIR$/app/Models/Invoice.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2021_01_02_120656_create_invoices_table.php" afterPath="$PROJECT_DIR$/database/migrations/2021_01_02_120656_create_invoices_table.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/backend/report/credit_customer.blade.php" afterPath="$PROJECT_DIR$/resources/views/backend/report/credit_customer.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/includes/sidebar.blade.php" afterPath="$PROJECT_DIR$/resources/views/includes/sidebar.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/web.php" afterPath="$PROJECT_DIR$/routes/web.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/backend/report/purchase.blade.php" afterPath="$PROJECT_DIR$/resources/views/backend/report/purchase.blade.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,7 +14,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="vertical" split-proportion="0.26273885">
+    <splitter split-orientation="vertical" split-proportion="0.30732483">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
           <file leaf-file-name="web.php" pinned="false" current-in-tab="false">
@@ -34,7 +30,7 @@
           <file leaf-file-name="PurchaseController.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/Http/Controllers/backend/Report/PurchaseController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="239">
+                <state relative-caret-position="197">
                   <caret line="16" column="204" lean-forward="false" selection-start-line="16" selection-start-column="204" selection-end-line="16" selection-end-column="204" />
                   <folding />
                 </state>
@@ -44,11 +40,11 @@
           <file leaf-file-name="purchase.blade.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/resources/views/backend/report/purchase.blade.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="224">
-                  <caret line="101" column="36" lean-forward="false" selection-start-line="101" selection-start-column="36" selection-end-line="101" selection-end-column="36" />
+                <state relative-caret-position="168">
+                  <caret line="21" column="149" lean-forward="false" selection-start-line="21" selection-start-column="149" selection-end-line="21" selection-end-column="149" />
                   <folding>
                     <element signature="e#373#402#0#HTML" expanded="true" />
-                    <element signature="e#1478#1499#0#HTML" expanded="true" />
+                    <element signature="e#1558#1579#0#HTML" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -61,10 +57,10 @@
           <file leaf-file-name="purchase.blade.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/resources/views/backend/report/purchase.blade.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="322">
-                  <caret line="82" column="32" lean-forward="false" selection-start-line="82" selection-start-column="32" selection-end-line="82" selection-end-column="32" />
+                <state relative-caret-position="-189">
+                  <caret line="89" column="25" lean-forward="false" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
                   <folding>
-                    <element signature="e#1478#1499#0#HTML" expanded="true" />
+                    <element signature="e#1558#1579#0#HTML" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -618,12 +614,12 @@
       <workItem from="1612323396032" duration="8077000" />
       <workItem from="1612354461116" duration="16000" />
       <workItem from="1613278340872" duration="19839000" />
-      <workItem from="1613363268976" duration="11399000" />
+      <workItem from="1613363268976" duration="12609000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="224290000" />
+    <option name="totallyTimeSpent" value="225500000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -1060,7 +1056,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/backend/Report/PurchaseController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
+        <state relative-caret-position="197">
           <caret line="16" column="204" lean-forward="false" selection-start-line="16" selection-start-column="204" selection-end-line="16" selection-end-column="204" />
           <folding />
         </state>
@@ -1068,10 +1064,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/backend/report/purchase.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="82" column="32" lean-forward="false" selection-start-line="82" selection-start-column="32" selection-end-line="82" selection-end-column="32" />
+        <state relative-caret-position="-189">
+          <caret line="89" column="25" lean-forward="false" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
           <folding>
-            <element signature="e#1478#1499#0#HTML" expanded="true" />
+            <element signature="e#1558#1579#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>

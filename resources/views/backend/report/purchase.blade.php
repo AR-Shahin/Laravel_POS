@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','Credit Customer')
+@section('title','Purchase Report')
 @section('main_content')
     <div class="row no-gutters">
         <div class="col-12 col-md-12">
@@ -15,11 +15,11 @@
 
                                 <div class="row no-gutters">
                                     <div class="col-4">
-                                        <input type="date" class="form-control" name="start_date" id="start_date">
+                                        <input type="date" class="form-control" name="start_date" id="start_date" value="@php echo date('Y-m-d') @endphp">
                                     </div>
 
                                     <div class="col-4">
-                                        <input type="date" class="form-control" name="end_date" id="end_date">
+                                        <input type="date" class="form-control" name="end_date" id="end_date" value="@php echo date('Y-m-d') @endphp">
                                     </div>
                                     <div class="col-4">
                                         <button class="btn btn-info"><i class="fa fa-search"></i> Search</button>
@@ -88,10 +88,6 @@
     }
   $('body').on('submit','#purchaseReportForm',function (e) {
       e.preventDefault();
-      if($('#start_date').val() == '' || $('#end_date').val() == ''){
-          setSwalAlert('info','Error!','Please Select Date!');
-          return;
-      }
       var start = $('#start_date').val();
       var end = $('#end_date').val();
       $.ajax({
@@ -101,12 +97,32 @@
           success : function (response) {
               $('#cardBody').show();
               $('#startDate').text(start);
+
               $('#endDate').text(end);
             // console.log(response);
               table_data_row(response);
           }
       })
-  })
+  });
+
+    function getTodaysPurchaseReports() {
+        var start = $('#start_date').val();
+        var end = $('#end_date').val();
+        $.ajax({
+            url : "{{route('report.purchase.date')}}",
+            method : 'get',
+            data : {start_date:start, end_date:end},
+            success : function (response) {
+                $('#cardBody').show();
+                $('#startDate').text(start);
+
+                $('#endDate').text(end);
+                // console.log(response);
+                table_data_row(response);
+            }
+        })
+    }
+    getTodaysPurchaseReports();
 
 </script>
 @endpush
