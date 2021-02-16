@@ -111,6 +111,10 @@ Route::middleware(['auth'])->group(function () {
         #purchase
         Route::get('purchase','PurchaseController@index')->name('purchase');
         Route::get('purchase/date','PurchaseController@dateWisePurchaseReport')->name('purchase.date');
+
+        #purchase
+        Route::get('invoice','InvoiceController@index')->name('invoice');
+        Route::get('invoice/date','InvoiceController@dateWiseInvoiceReport')->name('invoice.date');
     });
     });
 

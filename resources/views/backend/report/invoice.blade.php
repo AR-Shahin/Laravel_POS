@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','Purchase Report')
+@section('title','Invoice Report')
 @section('main_content')
     <div class="row no-gutters">
         <div class="col-12 col-md-12">
@@ -7,11 +7,11 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-4">
-                            <h3 class="mb-0 text-primary" style="display: inline-block" >Purchase Report</h3>
+                            <h3 class="mb-0 text-primary" style="display: inline-block" >Invoice Report</h3>
                         </div>
                         <div class="col-8">
 
-                            <form action="" method="get" id="purchaseReportForm">
+                            <form action="" method="get" id="invoiceReportForm">
 
                                 <div class="row no-gutters">
                                     <div class="col-4">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="card-body" style="display: none" id="cardBody">
-                    <h6 class="text-primary">Purchase Report From <b><span id="startDate"></span></b> to <b><span id="endDate"></span></b></h6>
+                    <h6 class="text-primary">Invoice Report From <b><span id="startDate"></span></b> to <b><span id="endDate"></span></b></h6>
                     <hr>
                     <div class="adv-table">
                         <table class=" display table  table-striped" id="purchaseReportTable_">
@@ -40,13 +40,13 @@
                                 <th>Date</th>
                                 <th>Product</th>
                                 <th>Category</th>
-                                <th>Supplier</th>
+                                <th>Customer</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Total</th>
                             </tr>
 
-                            <tbody id="purchaseReportTable">
+                            <tbody id="invoiceReportTable">
 
                             </tbody>
                             </thead>
@@ -67,16 +67,16 @@
         var total = 0;
         $.each(data ,function (key,value) {
             rows+= '<tr>';
-            rows+= '<td>'+ value.date +'</td>';
+            rows+= '<td>'+ value.created_at +'</td>';
             rows+= '<td> '+ value.product.name +'</td>';
             rows+= '<td> '+ value.category.name +'</td>';
-            rows+= '<td> '+ value.supplier.name +'</td>';
-            rows+= '<td> '+ value.buying_quantity +'</td>';
+            rows+= '<td> '+ value.invoice.customer_id +'</td>';
+            rows+= '<td> '+ value.selling_qty +'</td>';
             rows+= '<td> '+ value.unit_price +'</td>';
-            rows+= '<td> '+ value.buying_price +'</td>';
+            rows+= '<td> '+ value.selling_price +'</td>';
             rows+= '</tr>';
-            qty += value.buying_quantity;
-            total += value.buying_price;
+            qty += value.selling_qty;
+            total += value.selling_price;
         });
         rows += '<tr><th colspan="4" class="text-right">Total : </th>';
         rows += '<td>'+qty+'</td>';
@@ -85,32 +85,32 @@
         rows += '</tr>';
 
 
-        $('#purchaseReportTable').html(rows);
+        $('#invoiceReportTable').html(rows);
     }
-  $('body').on('submit','#purchaseReportForm',function (e) {
-      e.preventDefault();
-      var start = $('#start_date').val();
-      var end = $('#end_date').val();
-      $.ajax({
-          url : "{{route('report.purchase.date')}}",
-          method : 'get',
-          data : {start_date:start, end_date:end},
-          success : function (response) {
-              $('#cardBody').show();
-              $('#startDate').text(start);
-
-              $('#endDate').text(end);
-            // console.log(response);
-              table_data_row(response);
-          }
-      })
-  });
-
-    function getTodaysPurchaseReports() {
+    $('body').on('submit','#invoiceReportForm',function (e) {
+        e.preventDefault();
         var start = $('#start_date').val();
         var end = $('#end_date').val();
         $.ajax({
-            url : "{{route('report.purchase.date')}}",
+            url : "{{route('report.invoice.date')}}",
+            method : 'get',
+            data : {start_date:start, end_date:end},
+            success : function (response) {
+                $('#cardBody').show();
+                $('#startDate').text(start);
+
+                $('#endDate').text(end);
+                // console.log(response);
+                table_data_row(response);
+            }
+        })
+    });
+
+    function getTodaysInvoicesReports() {
+        var start = $('#start_date').val();
+        var end = $('#end_date').val();
+        $.ajax({
+            url : "{{route('report.invoice.date')}}",
             method : 'get',
             data : {start_date:start, end_date:end},
             success : function (response) {
@@ -123,7 +123,7 @@
             }
         })
     }
-    getTodaysPurchaseReports();
+    getTodaysInvoicesReports();
 
 </script>
 @endpush

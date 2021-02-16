@@ -13,7 +13,6 @@ class PurchaseController extends Controller
         return view('backend.report.purchase');
     }
     public function dateWisePurchaseReport(Request $request){
-
         return response()->json(Purchase::with(['category','supplier','product'])->whereBetween('date',[$request->get('start_date',date('Y-m-d')),$request->get('end_date',date('Y-m-d'))])->latest()->get());
 
     }

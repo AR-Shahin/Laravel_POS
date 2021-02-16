@@ -71,7 +71,7 @@
                     <li><a href="{{route('report.credit.customer')}}">Credit Customers</a></li>
                     <li><a href="{{route('report.credit.customer')}}">Paid Customers</a></li>
                     <li><a href="{{route('report.purchase')}}">Purchases</a></li>
-                    <li><a href="{{route('report.credit.customer')}}">Invoices</a></li>
+                    <li><a href="{{route('report.invoice')}}">Invoices</a></li>
                     <li><a href="{{route('report.credit.customer')}}">Payments</a></li>
                 </ul>
             </li>
