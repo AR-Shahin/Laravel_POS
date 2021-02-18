@@ -10,8 +10,13 @@ use function response;
 
 class CategoryController extends Controller
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Product';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Category';
         return view('backend.category.index',$this->data);
     }
 

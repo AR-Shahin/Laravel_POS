@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     use HasFactory;
-protected $fillable = ['status','added_by','created_by','supplier_id','product_id','category_id','date','description','buying_quantity','purchase_no','buying_price','unit_price'];
+    protected $fillable = ['status','added_by','created_by','supplier_id','product_id','category_id','date','description','buying_quantity','purchase_no','buying_price','unit_price'];
+    public function getDateAttribute($date){
+        return date('d-M-Y | l',strtotime($date));
+    }
     public function supplier(){
         return $this->belongsTo(Supplier::class,'supplier_id','id');
     }

@@ -12,7 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Product';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Product';
         $this->data['cats'] = Category::where('status',1)->latest()->get();
         $this->data['units'] = Unit::where('status',1)->latest()->get();
         $this->data['suppliers'] = Supplier::latest()->get();

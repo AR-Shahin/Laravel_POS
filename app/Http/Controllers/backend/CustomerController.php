@@ -8,7 +8,13 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'User';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Customer';
         return view('backend.customer.index',$this->data);
     }
     public function getAllCustomer(){

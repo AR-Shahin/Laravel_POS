@@ -12,7 +12,13 @@ use function view;
 
 class UnitController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Product';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Unit';
         return view('backend.unit.index',$this->data);
     }
 

@@ -15,6 +15,11 @@ use function unlink;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Admin';
+    }
     private function isPermittedExtension($ext){
         $permit = ['png','jpg','jpeg'];
         if(in_array($ext,$permit)){
@@ -23,6 +28,7 @@ class AdminController extends Controller
         return false;
     }
     public function index(){
+        $this->data['sub_menu'] = 'Admin';
         $this->data['admin'] = User::latest()->get();
         return view('backend.admin.index',$this->data);
     }

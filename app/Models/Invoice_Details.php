@@ -11,10 +11,10 @@ class Invoice_Details extends Model
 {
     use HasFactory;
     public function getDateAttribute($date){
-        return date('Y-m-d',strtotime($date));
+        return date('d-M-Y | l',strtotime($date));
     }
     public function getCreatedAtAttribute($date){
-        return date('Y-m-d',strtotime($date));
+        return date('d-M-Y | l',strtotime($date));
     }
     public function product(){
         return $this->belongsTo(Product::class);

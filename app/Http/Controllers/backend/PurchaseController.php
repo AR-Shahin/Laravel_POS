@@ -15,7 +15,13 @@ use function view;
 
 class PurchaseController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Purchase';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Purchase';
         $this->data['purchases'] = Purchase::latest()->get();
         return view('backend.purchase.index',$this->data);
     }

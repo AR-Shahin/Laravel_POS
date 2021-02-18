@@ -8,7 +8,14 @@ use function view;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Dashboard';
+        $this->data['sub_menu'] = 'Dashboard';
+    }
+
     public function dashboard(){
-        return view('backend.dashboard');
+        return view('backend.dashboard',$this->data);
     }
 }

@@ -12,6 +12,11 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public $data = [];
+    public function __construct()
+    {
+        $this->data['main_menu'] = '';
+        $this->data['sub_menu'] = '';
+    }
 
     public function returnAjaxResponse($flag,$message=null,array $data = null,$code = null){
         return response()->json([

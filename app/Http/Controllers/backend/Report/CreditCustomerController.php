@@ -13,8 +13,14 @@ use function view;
 
 class CreditCustomerController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Report';
+    }
     public function index(){
-        return view('backend.report.credit_customer');
+        $this->data['sub_menu'] = 'Credit_Report';
+        return view('backend.report.credit_customer',$this->data);
     }
 
     public function getAllCreditCustomers(){

@@ -17,7 +17,13 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'Invoice';
+    }
     public function index(){
+        $this->data['sub_menu'] = 'Invoice';
         $this->data['invoices'] = Invoice::latest()->get();
         $invoiceData = Invoice::latest()->first();
         if($invoiceData == null){
@@ -165,13 +171,14 @@ class InvoiceController extends Controller
     }
 
     public function approve(Request $request){
-        $products =  Invoice_Details::select('product_id','selling_qty')->where('invoice_id',$request->id)->get();
+        $products =  Invoice_Details::select('product_id','selling_qty','status')->where('invoice_id',$request->id)->get();
         foreach ($products as  $product){
             Product::where('id',$product->product_id)->decrement('quantity', $product->selling_qty);
         }
         $update = Invoice::find($request->id)->update([
             'status' => 1
         ]);
+        $product->status = 1;
         if($update){
             return $this->returnAjaxResponse('UPDATE','Approve Invoice!');
         }

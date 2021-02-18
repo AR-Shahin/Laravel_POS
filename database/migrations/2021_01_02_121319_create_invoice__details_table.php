@@ -23,7 +23,7 @@ class CreateInvoiceDetailsTable extends Migration
             $table->double('selling_qty');
             $table->double('unit_price');
             $table->double('selling_price');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

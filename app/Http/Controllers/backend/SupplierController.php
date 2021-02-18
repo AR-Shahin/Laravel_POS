@@ -9,7 +9,14 @@ use function ucwords;
 
 class SupplierController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['main_menu'] = 'User';
+    }
+
     public function index(){
+        $this->data['sub_menu'] = 'Supplier';
         return view('backend.supplier.index',$this->data);
     }
     public function getAllSupplier(){
@@ -26,7 +33,6 @@ class SupplierController extends Controller
             ]);
         }
     }
-
     public function store(Request $request){
 
         $email = Supplier::where('email',$request->email)->first();
